@@ -3,18 +3,18 @@ using NUnit.Framework;
 using Moq;
 using UnityEngine;
 using ElectricDrill.SimpleRpgCore;
-using ElectricDrill.SimpleRpgCore.Health;
 using ElectricDrill.SimpleRpgCore.Stats;
 using ElectricDrill.SimpleRpgCore.Utils;
+using ElectricDrill.SimpleRpgHealth;
 using Object = UnityEngine.Object;
 
-namespace ElectricDrill.SimpleRpgCoreTests
+namespace ElectricDrill.SimpleRpgHealthTests
 {
     public class EntityHealthTests
     {
         const long MAX_HP = 100;
 
-        public class MockSource : Source 
+        public class MockSource : Source
         {
             public static MockSource Create()
             {
@@ -129,11 +129,11 @@ namespace ElectricDrill.SimpleRpgCoreTests
             mockDealerEntityStats.Setup(x => x.Get(It.IsAny<Stat>())).Returns(0L);
             
             // setup health long refs since would be null otherwise
-            entityHealth.maxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
+            entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             entityHealth.hp = new LongRef() { UseConstant = true, ConstantValue = MAX_HP };
             entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
 
-            entityHealth.SetupHealth();
+            entityHealth.SetupBaseMaxHp();
         }
 
         [TearDown]
