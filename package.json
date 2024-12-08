@@ -1,0 +1,23 @@
+{
+  "name": "com.electricdrill.simple-rpg-core-tests",
+  "version": "1.0.0",
+  "displayName": "SimpleRPGCoreTests",
+  "description": "Tests package for SimpleRPGCore",
+  "unity": "2022.1",
+  "dependencies": {
+    "com.unity.ext.nunit": "2.0.5",
+    "com.electricdrill.simple-rpg-core": "1.0.0",
+    "com.github-glitchenzo.nugetforunity": "4.1.1"
+  },
+  "keywords": [
+    "RPG",
+    "statistic",
+    "utility",
+    "health",
+    "component"
+  ],
+  "author": {
+    "name": "Emanuele Cisotto",
+    "email": "ema.cis8@gmail.com"
+  }
+}
