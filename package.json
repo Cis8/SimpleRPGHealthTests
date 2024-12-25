@@ -1,12 +1,13 @@
 {
-  "name": "com.electricdrill.simple-rpg-core-tests",
+  "name": "com.electricdrill.simple-rpg-health-tests",
   "version": "1.0.0",
-  "displayName": "SimpleRPGCoreTests",
+  "displayName": "SimpleRPGHealthTests",
   "description": "Tests package for SimpleRPGCore",
   "unity": "2022.1",
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",
     "com.electricdrill.simple-rpg-core": "1.0.0",
+    "com.electricdrill.simple-rpg-health": "1.0.0",
     "com.github-glitchenzo.nugetforunity": "4.1.1"
   },
   "keywords": [
