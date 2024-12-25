@@ -1,2 +1,2 @@
 # SimpleRPGCoreTests
-Tests for Simple RPG Core
+Tests for Simple RPG Health

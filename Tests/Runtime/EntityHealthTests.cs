@@ -133,6 +133,9 @@ namespace ElectricDrill.SimpleRpgHealthTests
             entityHealth.totalMaxHp = new LongRef { UseConstant = true };
             entityHealth.hp = new LongRef() { UseConstant = true, ConstantValue = MAX_HP };
             entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
+            
+            // Use DestroyImmediateOnDeathStrategy for testing
+            entityHealth.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
             entityHealth.SetupBaseMaxHp();
         }
@@ -279,6 +282,131 @@ namespace ElectricDrill.SimpleRpgHealthTests
 
             // Assert
             Assert.AreEqual(MAX_HP - (DMG_AMOUNT - (DEFENSE_AMOUNT - PIERCING_AMOUNT)), entityHealth.Hp);
+        }
+        
+        [Test]
+        public void TotalMaxHp_CalculatedCorrectly_WithFlatAndPercentageModifiers() {
+            // Arrange
+            const long BASE_MAX_HP = 100;
+            const long FLAT_MODIFIER = 50;
+            const long PERCENTAGE_MODIFIER = 20; // 20%
+            
+            var percentageModifier = new Percentage(PERCENTAGE_MODIFIER);
+            entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = BASE_MAX_HP };
+            entityHealth.totalMaxHp = new LongRef { UseConstant = true };
+            entityHealth.hp = new LongRef() { UseConstant = true, ConstantValue = BASE_MAX_HP };
+            entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
+
+            // Act
+            entityHealth.AddMaxHpFlatModifier(FLAT_MODIFIER);
+            entityHealth.AddMaxHpPercentageModifier(PERCENTAGE_MODIFIER);
+
+            // Assert
+            long expectedTotalMaxHp = BASE_MAX_HP + FLAT_MODIFIER;
+            expectedTotalMaxHp += (long)(expectedTotalMaxHp * percentageModifier);
+            Assert.AreEqual(expectedTotalMaxHp, entityHealth.MaxHp);
+        }
+        
+        [Test]
+        public void Health_CannotBeNegative_WhenHealthCanBeNegativeIsFalse() {
+            // Arrange
+            const long DMG_AMOUNT = 150;
+            entityHealth.HealthCanBeNegative = false;
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(preDmgInfo);
+
+            // Assert
+            Assert.AreEqual(0, entityHealth.Hp);
+        }
+        
+        [Test]
+        public void Health_CanBeNegative_WhenHealthCanBeNegativeIsTrue() {
+            // Arrange
+            const long DMG_AMOUNT = 150;
+            entityHealth.HealthCanBeNegative = true;
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(preDmgInfo);
+
+            // Assert
+            Assert.AreEqual(MAX_HP - DMG_AMOUNT, entityHealth.Hp);
+        }
+        
+        [Test]
+        public void Health_IsRestoredCorrectly_WhenHealed() {
+            // Arrange
+            const long DMG_AMOUNT = 50;
+            const long HEAL_AMOUNT = 30;
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            entityHealth.TakeDamage(preDmgInfo);
+
+            var preHealInfo = PreHealInfo.Builder
+                .WithAmount(HEAL_AMOUNT)
+                .WithSource(mockSource)
+                .WithHealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.Heal(preHealInfo);
+
+            // Assert
+            Assert.AreEqual(MAX_HP - DMG_AMOUNT + HEAL_AMOUNT, entityHealth.Hp);
+        }
+        
+        [Test]
+        public void Barrier_CannotBeNegative() {
+            // Arrange
+            const long BARRIER_AMOUNT = 10;
+            const long DMG_AMOUNT = 20;
+
+            entityHealth.AddBarrier(BARRIER_AMOUNT);
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(preDmgInfo);
+
+            // Assert
+            Assert.AreEqual(0, entityHealth.Barrier);
         }
     }
 }

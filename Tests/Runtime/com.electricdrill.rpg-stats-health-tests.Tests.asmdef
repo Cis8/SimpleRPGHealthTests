@@ -1,6 +1,6 @@
 {
-    "name": "com.electricdrill.rpg-stats-core-tests.Tests",
-    "rootNamespace": "",
+    "name": "com.electricdrill.rpg-stats-health-tests.Tests",
+    "rootNamespace": "ElectricDrill.SimpleRpgHealthTests",
     "references": [
         "GUID:46d39bf349b8a94469f824a6ac71ae68",
         "GUID:0acc523941302664db1f4e527237feb3",

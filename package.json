@@ -2,7 +2,7 @@
   "name": "com.electricdrill.simple-rpg-health-tests",
   "version": "1.0.0",
   "displayName": "SimpleRPGHealthTests",
-  "description": "Tests package for SimpleRPGCore",
+  "description": "Tests package for SimpleRPGHealth",
   "unity": "2022.1",
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",
