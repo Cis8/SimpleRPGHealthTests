@@ -130,6 +130,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
             
             // setup health long refs since would be null otherwise
             entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
+            entityHealth.totalMaxHp = new LongRef { UseConstant = true };
             entityHealth.hp = new LongRef() { UseConstant = true, ConstantValue = MAX_HP };
             entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
 
