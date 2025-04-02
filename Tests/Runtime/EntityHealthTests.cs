@@ -18,7 +18,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
         {
             public static MockSource Create()
             {
-                var source = ScriptableObject.CreateInstance<MockSource>();
+                var source = CreateInstance<MockSource>();
                 source.name = "TestSource";
                 return source;
             }
@@ -33,7 +33,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
                 DefReductionFn defReductionFn = null,
                 bool ignoresBarrier = false)
             {
-                var dmgType = ScriptableObject.CreateInstance<MockDmgType>();
+                var dmgType = CreateInstance<MockDmgType>();
                 dmgType.name = "TestDmgType";
                 dmgType.ReducedBy = reducedBy;
                 dmgType.DmgReductionFn = dmgReductionFn;
@@ -48,7 +48,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
         {
             public static MockStatSet Create()
             {
-                var statSet = ScriptableObject.CreateInstance<MockStatSet>();
+                var statSet = CreateInstance<MockStatSet>();
                 statSet.name = "TestStatSet";
                 return statSet;
             }
@@ -62,7 +62,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
             
             public static MockFlatDmgReductionFn Create(long reducedDmgAmount)
             {
-                var flatDmgReductionFn = ScriptableObject.CreateInstance<MockFlatDmgReductionFn>();
+                var flatDmgReductionFn = CreateInstance<MockFlatDmgReductionFn>();
                 flatDmgReductionFn.name = "TestFlatDmgReductionFn";
                 flatDmgReductionFn._reducedDmg = reducedDmgAmount;
                 return flatDmgReductionFn;
@@ -80,7 +80,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
             
             public static MockFlatDefReductionFn Create(long reducedDefAmount)
             {
-                var flatDefReductionFn = ScriptableObject.CreateInstance<MockFlatDefReductionFn>();
+                var flatDefReductionFn = CreateInstance<MockFlatDefReductionFn>();
                 flatDefReductionFn.name = "TestFlatDefReductionFn";
                 flatDefReductionFn._reducedDef = reducedDefAmount;
                 return flatDefReductionFn;
@@ -132,6 +132,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
             entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             entityHealth.totalMaxHp = new LongRef { UseConstant = true };
             entityHealth.hp = new LongRef() { UseConstant = true, ConstantValue = MAX_HP };
+            entityHealth.deathThreshold = LongVarFactory.CreateLongVar(0);
             entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
             
             // Use DestroyImmediateOnDeathStrategy for testing
