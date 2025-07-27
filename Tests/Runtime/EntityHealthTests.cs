@@ -2,13 +2,13 @@ using System;
 using NUnit.Framework;
 using Moq;
 using UnityEngine;
-using ElectricDrill.SimpleRpgCore;
-using ElectricDrill.SimpleRpgCore.Stats;
-using ElectricDrill.SimpleRpgCore.Utils;
+using SoapRpgFramework;
+using SoapRpgFramework.Stats;
+using SoapRpgFramework.Utils;
 using ElectricDrill.SimpleRpgHealth;
 using Object = UnityEngine.Object;
 
-namespace ElectricDrill.SimpleRpgHealthTests
+namespace ElectricDrill.SoapRpgHealthTests
 {
     public class EntityHealthTests
     {

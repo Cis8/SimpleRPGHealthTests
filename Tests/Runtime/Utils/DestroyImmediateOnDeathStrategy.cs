@@ -1,7 +1,7 @@
 using ElectricDrill.SimpleRpgHealth;
 using UnityEngine;
 
-namespace ElectricDrill.SimpleRpgHealthTests
+namespace ElectricDrill.SoapRpgHealthTests
 {
     public class DestroyImmediateOnDeathStrategy : OnDeathStrategy
     {

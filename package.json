@@ -1,13 +1,13 @@
 {
-  "name": "com.electricdrill.simple-rpg-health-tests",
+  "name": "com.electricdrill.soap-rpg-health-tests",
   "version": "1.0.0",
-  "displayName": "SimpleRPGHealthTests",
-  "description": "Tests package for SimpleRPGHealth",
+  "displayName": "SoapRPGHealthTests",
+  "description": "Tests package for SoapRPGHealth",
   "unity": "2022.1",
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",
-    "com.electricdrill.simple-rpg-core": "1.0.0",
-    "com.electricdrill.simple-rpg-health": "1.0.0",
+    "com.electricdrill.soap-rpg-framework": "1.0.0",
+    "com.electricdrill.soap-rpg-health": "1.0.0",
     "com.github-glitchenzo.nugetforunity": "4.1.1"
   },
   "keywords": [

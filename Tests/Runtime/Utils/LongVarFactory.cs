@@ -1,7 +1,7 @@
-using ElectricDrill.SimpleRpgCore.Utils;
+using SoapRpgFramework.Utils;
 using UnityEngine;
 
-namespace ElectricDrill.SimpleRpgHealthTests
+namespace ElectricDrill.SoapRpgHealthTests
 {
     public static class LongVarFactory
     {
