@@ -1,11 +1,11 @@
 using System;
-using NUnit.Framework;
-using Moq;
-using UnityEngine;
-using SoapRpgFramework;
-using SoapRpgFramework.Stats;
-using SoapRpgFramework.Utils;
 using ElectricDrill.SimpleRpgHealth;
+using ElectricDrill.SoapRpgFramework;
+using ElectricDrill.SoapRpgFramework.Stats;
+using ElectricDrill.SoapRpgFramework.Utils;
+using Moq;
+using NUnit.Framework;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace ElectricDrill.SoapRpgHealthTests

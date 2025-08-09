@@ -1,4 +1,4 @@
-using SoapRpgFramework.Utils;
+using ElectricDrill.SoapRpgFramework.Utils;
 using UnityEngine;
 
 namespace ElectricDrill.SoapRpgHealthTests
