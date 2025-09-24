@@ -1,5 +1,4 @@
-using ElectricDrill.SimpleRpgHealth;
-using UnityEngine;
+using ElectricDrill.SoapRpgHealth;
 
 namespace ElectricDrill.SoapRpgHealthTests
 {

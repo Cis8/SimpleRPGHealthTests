@@ -1,5 +1,5 @@
 using System;
-using ElectricDrill.SimpleRpgHealth;
+using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
