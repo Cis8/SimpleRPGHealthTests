@@ -1,8 +1,10 @@
 using System;
-using ElectricDrill.SoapRpgHealth;
+using System.Reflection;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.SoapRpgHealth;
+using ElectricDrill.SoapRpgHealth.Events;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -138,6 +140,27 @@ namespace ElectricDrill.SoapRpgHealthTests
             // Use DestroyImmediateOnDeathStrategy for testing
             entityHealth.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
+            // Initialize required game events to prevent null reference exceptions
+            var preDmgGameEvent = ScriptableObject.CreateInstance<PreDmgGameEvent>();
+            var takenDmgGameEvent = ScriptableObject.CreateInstance<TakenDmgGameEvent>();
+            var entityDiedGameEvent = ScriptableObject.CreateInstance<EntityDiedGameEvent>();
+            var maxHealthChangedEvent = ScriptableObject.CreateInstance<EntityMaxHealthChangedGameEvent>();
+            var gainedHealthEvent = ScriptableObject.CreateInstance<EntityGainedHealthGameEvent>();
+            var lostHealthEvent = ScriptableObject.CreateInstance<EntityLostHealthGameEvent>();
+            var preHealEvent = ScriptableObject.CreateInstance<PreHealGameEvent>();
+            var entityHealedEvent = ScriptableObject.CreateInstance<EntityHealedGameEvent>();
+
+            // Use reflection to set the private fields
+            var type = typeof(EntityHealth);
+            type.GetField("preDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preDmgGameEvent);
+            type.GetField("takenDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, takenDmgGameEvent);
+            type.GetField("entityDiedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityDiedGameEvent);
+            type.GetField("maxHealthChangedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, maxHealthChangedEvent);
+            type.GetField("gainedHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, gainedHealthEvent);
+            type.GetField("lostHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, lostHealthEvent);
+            type.GetField("preHealEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preHealEvent);
+            type.GetField("entityHealedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityHealedEvent);
+
             entityHealth.SetupBaseMaxHp();
         }
 
@@ -159,6 +182,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(25)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -184,6 +208,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -210,6 +235,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -239,6 +265,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -275,6 +302,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -321,6 +349,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -344,6 +373,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -367,6 +397,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -400,6 +431,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -411,3 +443,4 @@ namespace ElectricDrill.SoapRpgHealthTests
         }
     }
 }
+
