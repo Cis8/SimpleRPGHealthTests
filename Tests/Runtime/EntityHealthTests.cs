@@ -6,6 +6,7 @@ using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Events;
+using ElectricDrill.SoapRpgHealth.Heal;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
