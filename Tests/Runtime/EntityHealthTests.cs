@@ -5,6 +5,7 @@ using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
+using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
 using Moq;
@@ -106,6 +107,18 @@ namespace ElectricDrill.SoapRpgHealthTests
         private Mock<EntityCore> mockDealerEntityCore;
         private Mock<EntityStats> mockDealerEntityStats;
 
+        // Test double for damage strategy (avoids Moq on ScriptableObject)
+        private class TestDamageStrategy : ConfigurableDamageStrategy
+        {
+            private Func<PreDmgInfo, DamageInfo> _fn;
+            public static TestDamageStrategy Create(Func<PreDmgInfo, DamageInfo> fn) {
+                var s = CreateInstance<TestDamageStrategy>();
+                s._fn = fn;
+                return s;
+            }
+            public override DamageInfo CalculateDamage(PreDmgInfo pre) => _fn(pre);
+        }
+
         [SetUp]
         public void Setup() {
             // setup entity that is taking damage
@@ -171,6 +184,19 @@ namespace ElectricDrill.SoapRpgHealthTests
             type.GetField("_entityHealedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityHealedEvent);
 
             entityHealth.SetupBaseMaxHp();
+
+            // Inject override damage strategy so tests are isolated from pipeline steps
+            var defaultStrategy = TestDamageStrategy.Create(pre => {
+                var info = new DamageInfo(pre);
+                info.Amounts.RawAmount = pre.Amount;
+                info.Amounts.DefReducedAmount = pre.Amount;
+                info.Amounts.DefBarrierReducedAmount = pre.Amount;
+                info.Amounts.NetAmount = pre.Amount;
+                return info;
+            });
+            typeof(EntityHealth)
+                .GetField("_overrideDamageStrategy", BindingFlags.NonPublic | BindingFlags.Instance)
+                ?.SetValue(entityHealth, defaultStrategy);
         }
 
         [TearDown]
@@ -178,7 +204,10 @@ namespace ElectricDrill.SoapRpgHealthTests
             Object.DestroyImmediate(gameObject);
         }
 
-        // ==== NO DEF TESTS ========================================
+        // ==== NO DEF / BARRIER DIRECT STEP TESTS HERE ANYMORE ========================================
+        // Tests for defense & barrier step logic moved to:
+        // ApplyDefenseStepTests.cs and ApplyBarrierStepTests.cs
+
         [Test]
         public void TakeDamage_WithMockedSourceAndType() {
             const long DMG_AMOUNT = 25;
@@ -202,126 +231,6 @@ namespace ElectricDrill.SoapRpgHealthTests
             Assert.AreEqual(MAX_HP - DMG_AMOUNT, entityHealth.Hp);
         }
 
-        [Test]
-        public void TakeDamage_WithBarrierReduction() {
-            // Arrange
-            const long DMG_AMOUNT = 25;
-            const long BARRIER_AMOUNT = 10;
-
-            entityHealth.AddBarrier(BARRIER_AMOUNT);
-
-            var mockSource = MockSource.Create();
-            var mockDmgType = MockDmgType.Create(); // doesn't ignore barrier by default
-
-            var preDmgInfo = PreDmgInfo.Builder
-                .WithAmount(DMG_AMOUNT)
-                .WithType(mockDmgType)
-                .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
-                .WithDealer(mockDealerEntityCore.Object)
-                .Build();
-
-            // Act
-            entityHealth.TakeDamage(preDmgInfo);
-
-            // Assert
-            Assert.AreEqual(MAX_HP - (DMG_AMOUNT - BARRIER_AMOUNT), entityHealth.Hp);
-            Assert.AreEqual(Math.Max(0, BARRIER_AMOUNT - DMG_AMOUNT), entityHealth.Barrier);
-        }
-
-        [Test]
-        public void TakeDamage_IgnoringBarrier() {
-            // Arrange
-            const long DMG_AMOUNT = 25;
-            const long BARRIER_AMOUNT = 10;
-
-            entityHealth.AddBarrier(BARRIER_AMOUNT);
-
-            var mockSource = MockSource.Create();
-            var mockDmgType = MockDmgType.Create(ignoresBarrier: true);
-
-            var preDmgInfo = PreDmgInfo.Builder
-                .WithAmount(DMG_AMOUNT)
-                .WithType(mockDmgType)
-                .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
-                .WithDealer(mockDealerEntityCore.Object)
-                .Build();
-
-            // Act
-            entityHealth.TakeDamage(preDmgInfo);
-
-            // Assert
-            Assert.AreEqual(MAX_HP - DMG_AMOUNT, entityHealth.Hp);
-            Assert.AreEqual(BARRIER_AMOUNT, entityHealth.Barrier);
-        }
-        
-        // ==== DEF TESTS ========================================
-        [Test]
-        public void TakeDamage_WithDefensiveStat() {
-            // Arrange
-            const long DMG_AMOUNT = 25;
-            const long DEFENSE_AMOUNT = 10;
-
-            var mockSource = MockSource.Create();
-            var armorStat = ScriptableObject.CreateInstance<Stat>();
-            armorStat.name = "Armor";
-            var mockFlatDmgReductionFn = MockFlatDmgReductionFn.Create(DMG_AMOUNT - DEFENSE_AMOUNT);
-            
-            var mockDmgType = MockDmgType.Create(reducedBy: armorStat, dmgReductionFn: mockFlatDmgReductionFn);
-            
-            var preDmgInfo = PreDmgInfo.Builder
-                .WithAmount(DMG_AMOUNT)
-                .WithType(mockDmgType)
-                .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
-                .WithDealer(mockDealerEntityCore.Object)
-                .Build();
-
-            // Act
-            entityHealth.TakeDamage(preDmgInfo);
-
-            // Assert
-            Assert.AreEqual(MAX_HP - (DMG_AMOUNT - DEFENSE_AMOUNT), entityHealth.Hp);
-        }
-        
-        [Test]
-        public void TakeDamage_WithDefensiveStatAndPiercingStat() {
-            // Arrange
-            const long DMG_AMOUNT = 25;
-            const long DEFENSE_AMOUNT = 10;
-            const long PIERCING_AMOUNT = 5;
-
-            var mockSource = MockSource.Create();
-            var armorStat = ScriptableObject.CreateInstance<Stat>();
-            armorStat.name = "Armor";
-            var piercingStat = ScriptableObject.CreateInstance<Stat>();
-            piercingStat.name = "Piercing";
-            var mockFlatDmgReductionFn = MockFlatDmgReductionFn.Create(DMG_AMOUNT - (DEFENSE_AMOUNT - PIERCING_AMOUNT));
-            var mockFlatDefReductionFn = MockFlatDefReductionFn.Create(DEFENSE_AMOUNT - PIERCING_AMOUNT);
-            
-            var mockDmgType = MockDmgType.Create(
-                reducedBy: armorStat,
-                dmgReductionFn: mockFlatDmgReductionFn,
-                piercedBy: piercingStat,
-                defReductionFn: mockFlatDefReductionFn
-            );
-            
-            var preDmgInfo = PreDmgInfo.Builder
-                .WithAmount(DMG_AMOUNT)
-                .WithType(mockDmgType)
-                .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
-                .WithDealer(mockDealerEntityCore.Object)
-                .Build();
-
-            // Act
-            entityHealth.TakeDamage(preDmgInfo);
-
-            // Assert
-            Assert.AreEqual(MAX_HP - (DMG_AMOUNT - (DEFENSE_AMOUNT - PIERCING_AMOUNT)), entityHealth.Hp);
-        }
-        
         [Test]
         public void TotalMaxHp_CalculatedCorrectly_WithFlatAndPercentageModifiers() {
             // Arrange
@@ -425,32 +334,6 @@ namespace ElectricDrill.SoapRpgHealthTests
             Assert.AreEqual(MAX_HP - DMG_AMOUNT + HEAL_AMOUNT, entityHealth.Hp);
         }
         
-        [Test]
-        public void Barrier_CannotBeNegative() {
-            // Arrange
-            const long BARRIER_AMOUNT = 10;
-            const long DMG_AMOUNT = 20;
-
-            entityHealth.AddBarrier(BARRIER_AMOUNT);
-
-            var mockSource = MockSource.Create();
-            var mockDmgType = MockDmgType.Create();
-
-            var preDmgInfo = PreDmgInfo.Builder
-                .WithAmount(DMG_AMOUNT)
-                .WithType(mockDmgType)
-                .WithSource(mockSource)
-                .WithTarget(mockDealerEntityCore.Object)
-                .WithDealer(mockDealerEntityCore.Object)
-                .Build();
-
-            // Act
-            entityHealth.TakeDamage(preDmgInfo);
-
-            // Assert
-            Assert.AreEqual(0, entityHealth.Barrier);
-        }
-        
         // ==== IMMUNITY TESTS ========================================
         [Test]
         public void TakeDamage_WhenImmune_NoDamageTaken()
@@ -510,6 +393,40 @@ namespace ElectricDrill.SoapRpgHealthTests
             Assert.IsTrue(eventRaised, "PreventedDmgEvent was not raised.");
             Assert.IsNotNull(eventInfo);
             Assert.AreEqual(DamagePreventedCause.EntityImmune, eventInfo.Cause);
+        }
+
+        [Test]
+        public void TakeDamage_UsesOverrideDamageStrategyNetAmount()
+        {
+            // Arrange
+            const long RAW = 80;
+            const long NET = 35;
+
+            var customStrategy = TestDamageStrategy.Create(pre => {
+                var info = new DamageInfo(pre);
+                info.Amounts.RawAmount = pre.Amount;
+                info.Amounts.DefReducedAmount = pre.Amount;          // pretend no def reduction
+                info.Amounts.DefBarrierReducedAmount = NET;          // pretend barrier trimmed it
+                info.Amounts.NetAmount = NET;                        // final applied dmg
+                return info;
+            });
+            typeof(EntityHealth)
+                .GetField("_overrideDamageStrategy", BindingFlags.NonPublic | BindingFlags.Instance)
+                ?.SetValue(entityHealth, customStrategy);
+
+            var pre = PreDmgInfo.Builder
+                .WithAmount(RAW)
+                .WithType(MockDmgType.Create())
+                .WithSource(MockSource.Create())
+                .WithTarget(entityHealth.Core)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(pre);
+
+            // Assert
+            Assert.AreEqual(MAX_HP - NET, entityHealth.Hp);
         }
     }
 }
