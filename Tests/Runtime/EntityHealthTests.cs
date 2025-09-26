@@ -4,6 +4,7 @@ using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
+using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Events;
 using Moq;
 using NUnit.Framework;
@@ -149,11 +150,13 @@ namespace ElectricDrill.SoapRpgHealthTests
             var lostHealthEvent = ScriptableObject.CreateInstance<EntityLostHealthGameEvent>();
             var preHealEvent = ScriptableObject.CreateInstance<PreHealGameEvent>();
             var entityHealedEvent = ScriptableObject.CreateInstance<EntityHealedGameEvent>();
+            var preventedDmgEvent = ScriptableObject.CreateInstance<PreventedDmgGameEvent>();
 
             // Use reflection to set the private fields
             var type = typeof(EntityHealth);
             type.GetField("preDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preDmgGameEvent);
             type.GetField("takenDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, takenDmgGameEvent);
+            type.GetField("preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preventedDmgEvent);
             type.GetField("entityDiedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityDiedGameEvent);
             type.GetField("maxHealthChangedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, maxHealthChangedEvent);
             type.GetField("gainedHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, gainedHealthEvent);
@@ -441,6 +444,66 @@ namespace ElectricDrill.SoapRpgHealthTests
             // Assert
             Assert.AreEqual(0, entityHealth.Barrier);
         }
+        
+        // ==== IMMUNITY TESTS ========================================
+        [Test]
+        public void TakeDamage_WhenImmune_NoDamageTaken()
+        {
+            // Arrange
+            const long DMG_AMOUNT = 50;
+            entityHealth.IsImmune = true;
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(preDmgInfo);
+
+            // Assert
+            Assert.AreEqual(MAX_HP, entityHealth.Hp);
+        }
+
+        [Test]
+        public void TakeDamage_WhenImmune_PreventedDmgEventRaisedWithCorrectCause()
+        {
+            // Arrange
+            const long DMG_AMOUNT = 50;
+            entityHealth.IsImmune = true;
+            bool eventRaised = false;
+            DmgPreventedInfo eventInfo = null;
+
+            var preventedDmgEvent = (PreventedDmgGameEvent)typeof(EntityHealth).GetField("preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(entityHealth);
+            preventedDmgEvent.OnEventRaised += (info) => {
+                eventRaised = true;
+                eventInfo = info;
+            };
+
+            var mockSource = MockSource.Create();
+            var mockDmgType = MockDmgType.Create();
+
+            var preDmgInfo = PreDmgInfo.Builder
+                .WithAmount(DMG_AMOUNT)
+                .WithType(mockDmgType)
+                .WithSource(mockSource)
+                .WithTarget(entityHealth.Core)
+                .WithDealer(mockDealerEntityCore.Object)
+                .Build();
+
+            // Act
+            entityHealth.TakeDamage(preDmgInfo);
+
+            // Assert
+            Assert.IsTrue(eventRaised, "PreventedDmgEvent was not raised.");
+            Assert.IsNotNull(eventInfo);
+            Assert.AreEqual(DamagePreventedCause.EntityImmune, eventInfo.Cause);
+        }
     }
 }
-
