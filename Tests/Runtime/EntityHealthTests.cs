@@ -117,6 +117,10 @@ namespace ElectricDrill.SoapRpgHealthTests
             mockEntityCore.Setup(x => x.Level).Returns(new EntityLevel());
             mockEntityStats.Setup(x => x.StatSet).Returns(MockStatSet.Create());
             mockEntityStats.Setup(x => x.Get(It.IsAny<Stat>())).Returns(0L);
+            
+            // Add mocks before adding EntityHealth so Awake can find them
+            gameObject.AddComponent(mockEntityCore.GetType());
+            gameObject.AddComponent(mockEntityStats.GetType());
 
             gameObject.AddComponent<EntityHealth>();
             entityHealth = gameObject.GetComponent<EntityHealth>();
@@ -155,15 +159,15 @@ namespace ElectricDrill.SoapRpgHealthTests
 
             // Use reflection to set the private fields
             var type = typeof(EntityHealth);
-            type.GetField("preDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preDmgGameEvent);
-            type.GetField("takenDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, takenDmgGameEvent);
-            type.GetField("preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preventedDmgEvent);
-            type.GetField("entityDiedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityDiedGameEvent);
-            type.GetField("maxHealthChangedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, maxHealthChangedEvent);
-            type.GetField("gainedHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, gainedHealthEvent);
-            type.GetField("lostHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, lostHealthEvent);
-            type.GetField("preHealEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preHealEvent);
-            type.GetField("entityHealedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityHealedEvent);
+            type.GetField("_preDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preDmgGameEvent);
+            type.GetField("_takenDmgInfoEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, takenDmgGameEvent);
+            type.GetField("_preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preventedDmgEvent);
+            type.GetField("_entityDiedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityDiedGameEvent);
+            type.GetField("_maxHealthChangedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, maxHealthChangedEvent);
+            type.GetField("_gainedHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, gainedHealthEvent);
+            type.GetField("_lostHealthEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, lostHealthEvent);
+            type.GetField("_preHealEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, preHealEvent);
+            type.GetField("_entityHealedEvent", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(entityHealth, entityHealedEvent);
 
             entityHealth.SetupBaseMaxHp();
         }
@@ -481,7 +485,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             bool eventRaised = false;
             DmgPreventedInfo eventInfo = null;
 
-            var preventedDmgEvent = (PreventedDmgGameEvent)typeof(EntityHealth).GetField("preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(entityHealth);
+            var preventedDmgEvent = (PreventedDmgGameEvent)typeof(EntityHealth).GetField("_preventedDmgEvent", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(entityHealth);
             preventedDmgEvent.OnEventRaised += (info) => {
                 eventRaised = true;
                 eventInfo = info;
