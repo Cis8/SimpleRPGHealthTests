@@ -126,6 +126,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             entityHealth = gameObject.GetComponent<EntityHealth>();
 
             entityHealth._stats = mockEntityStats.Object;
+            entityHealth._core = mockEntityCore.Object;
             
             // setup entity that is dealing damage
             mockDealerEntityCore = new Mock<EntityCore>();
@@ -190,7 +191,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(25)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
+                .WithTarget(mockDealerEntityCore.Object)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
@@ -439,7 +440,7 @@ namespace ElectricDrill.SoapRpgHealthTests
                 .WithAmount(DMG_AMOUNT)
                 .WithType(mockDmgType)
                 .WithSource(mockSource)
-                .WithTarget(entityHealth.Core)
+                .WithTarget(mockDealerEntityCore.Object)
                 .WithDealer(mockDealerEntityCore.Object)
                 .Build();
 
