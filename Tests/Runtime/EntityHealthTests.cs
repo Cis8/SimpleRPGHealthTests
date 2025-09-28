@@ -40,12 +40,12 @@ namespace ElectricDrill.SoapRpgHealthTests
         }
 
         // Test strategy (identity or custom transform)
-        private class TestDamageStrategy : ConfigurableDamageStrategy
+        private class TestDamageCalculationStrategy : DamageCalculationStrategy
         {
             private Func<DamageInfo, DamageInfo> _fn;
-            public static TestDamageStrategy Create(Func<DamageInfo, DamageInfo> fn)
+            public static TestDamageCalculationStrategy Create(Func<DamageInfo, DamageInfo> fn)
             {
-                var inst = CreateInstance<TestDamageStrategy>();
+                var inst = CreateInstance<TestDamageCalculationStrategy>();
                 inst._fn = fn;
                 return inst;
             }
@@ -102,8 +102,8 @@ namespace ElectricDrill.SoapRpgHealthTests
 
             _entityHealth.SetupBaseMaxHp();
 
-            var defaultStrategy = TestDamageStrategy.Create(info => info);
-            SetPriv("_defaultDamageStrategy", defaultStrategy);
+            var defaultStrategy = TestDamageCalculationStrategy.Create(info => info);
+            SetPriv("_baseDamageCalculationStrategy", defaultStrategy);
         }
 
         private void SetPriv(string field, object value) =>
@@ -189,12 +189,12 @@ namespace ElectricDrill.SoapRpgHealthTests
         {
             const long RAW = 80;
             const long NET = 10;
-            var strat = TestDamageStrategy.Create(info =>
+            var strat = TestDamageCalculationStrategy.Create(info =>
             {
                 info.Amounts.NetAmount = NET;
                 return info;
             });
-            SetPriv("_overrideDamageStrategy", strat);
+            SetPriv("_overrideDamageCalculationStrategy", strat);
 
             _entityHealth.TakeDamage(BuildPre(RAW));
 
