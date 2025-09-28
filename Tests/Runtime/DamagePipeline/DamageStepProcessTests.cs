@@ -8,11 +8,9 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 {
     public class DamageStepProcessTests
     {
-        // Minimal mocks
-        private class MockDmgType : DmgType { public static MockDmgType Create() { return CreateInstance<MockDmgType>(); } }
-        private class MockSource : Source { public static MockSource Create() { return CreateInstance<MockSource>(); } }
+        private class MockDmgType : DmgType { public static MockDmgType Create() => CreateInstance<MockDmgType>(); }
+        private class MockSource : Source { public static MockSource Create() => CreateInstance<MockSource>(); }
 
-        // Steps used to manipulate NetAmount
         private class ZeroDamageStep : DamageStep {
             public override string DisplayName => "Zero";
             public override DamageInfo ProcessStep(DamageInfo data) {
@@ -28,20 +26,20 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             }
         }
         private class RaiseDamageStep : DamageStep {
-            long _value;
-            public RaiseDamageStep(long value) { _value = value; }
+            private readonly long _value;
+            public RaiseDamageStep(long value){ _value = value; }
             public override string DisplayName => "Raise";
-            public override DamageInfo ProcessStep(DamageInfo data) {
+            public override DamageInfo ProcessStep(DamageInfo data){
                 data.Amounts.NetAmount = _value;
                 return data;
             }
         }
         private class PartialReduceStep : DamageStep {
-            long _reduceTo;
-            public PartialReduceStep(long reduceTo) { _reduceTo = reduceTo; }
+            private readonly long _reduceTo;
+            public PartialReduceStep(long reduceTo){ _reduceTo = reduceTo; }
             public override string DisplayName => "Partial";
-            public override DamageInfo ProcessStep(DamageInfo data) {
-                data.Amounts.NetAmount = _reduceTo; // keep > 0
+            public override DamageInfo ProcessStep(DamageInfo data){
+                data.Amounts.NetAmount = _reduceTo;
                 return data;
             }
         }
@@ -64,54 +62,44 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
         }
 
         [TearDown]
-        public void Cleanup() {
+        public void Cleanup(){
             foreach (var g in GameObject.FindObjectsOfType<GameObject>())
                 Object.DestroyImmediate(g);
         }
 
         [Test]
-        public void Process_SetsReducedToZeroByStep_WhenDamageGoesToZero() {
+        public void Process_SetsPipelineReducedToZero_WhenDamageGoesToZero() {
             var info = MakeInfo(10);
-            Assert.IsNull(info.ReducedToZeroByStep);
+            Assert.AreEqual(DamagePreventionReason.None, info.Reasons);
+            Assert.IsNull(info.TerminationStepType);
 
             var step = new ZeroDamageStep();
             step.Process(info);
 
-            Assert.AreEqual(typeof(ZeroDamageStep), info.ReducedToZeroByStep);
+            Assert.IsTrue((info.Reasons & DamagePreventionReason.PipelineReducedToZero) != 0);
+            Assert.AreEqual(typeof(ZeroDamageStep), info.TerminationStepType);
         }
 
         [Test]
-        public void Process_DoesNotOverrideReducedToZero_WhenRemainsZero_WithDifferentZeroingStep() {
+        public void Process_DoesNotOverrideTerminationStep_WhenAlreadyPrevented() {
             var info = MakeInfo(5);
-            var first = new ZeroDamageStep();
-            first.Process(info);
-            Assert.AreEqual(typeof(ZeroDamageStep), info.ReducedToZeroByStep);
+            new ZeroDamageStep().Process(info);
+            Assert.AreEqual(typeof(ZeroDamageStep), info.TerminationStepType);
 
-            var second = new AnotherZeroDamageStep();
-            second.Process(info); // Should NOT change ReducedToZeroByStep
+            // Second zero step should early-return (IsPrevented true)
+            new AnotherZeroDamageStep().Process(info);
 
-            Assert.AreEqual(typeof(ZeroDamageStep), info.ReducedToZeroByStep, "Second zeroing step should not overwrite original step type.");
+            Assert.AreEqual(typeof(ZeroDamageStep), info.TerminationStepType);
         }
 
         [Test]
-        public void Process_ClearsReducedToZeroStep_WhenDamageReturnsAboveZero() {
-            var info = MakeInfo(8);
-            var zero = new ZeroDamageStep();
-            zero.Process(info);
-            Assert.AreEqual(typeof(ZeroDamageStep), info.ReducedToZeroByStep);
-
-            var raise = new RaiseDamageStep(3);
-            raise.Process(info);
-
-            Assert.IsNull(info.ReducedToZeroByStep);
-        }
-
-        [Test]
-        public void Process_DoesNotSetReducedToZero_WhenDamageStaysAboveZero() {
+        public void Process_DoesNotSetPipelineReducedToZero_WhenDamageStaysAboveZero() {
             var info = MakeInfo(12);
-            var partial = new PartialReduceStep(5);
-            partial.Process(info);
-            Assert.IsNull(info.ReducedToZeroByStep);
+            new PartialReduceStep(5).Process(info);
+
+            Assert.AreEqual(DamagePreventionReason.None, info.Reasons);
+            Assert.IsNull(info.TerminationStepType);
+            Assert.IsFalse(info.IsPrevented);
         }
     }
 }
