@@ -105,7 +105,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
         [TearDown]
         public void CleanupScene() {
-            foreach (var go in GameObject.FindObjectsOfType<GameObject>())
+            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 Object.DestroyImmediate(go);
         }
 

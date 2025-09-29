@@ -1,4 +1,5 @@
 using ElectricDrill.SoapRpgFramework;
+using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
@@ -63,7 +64,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
         [TearDown]
         public void Cleanup(){
-            foreach (var g in GameObject.FindObjectsOfType<GameObject>())
+            foreach (var g in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 Object.DestroyImmediate(g);
         }
 
