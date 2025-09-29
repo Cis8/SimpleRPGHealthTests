@@ -191,13 +191,11 @@ namespace ElectricDrill.SoapRpgHealthTests
             const long NET = 10;
             var strat = TestDamageCalculationStrategy.Create(info =>
             {
-                info.Amounts.NetAmount = NET;
+                info.Amounts.Current = NET;
                 return info;
             });
             SetPriv("_overrideDamageCalculationStrategy", strat);
-
             _entityHealth.TakeDamage(BuildPre(RAW));
-
             Assert.AreEqual(MAX_HP - NET, _entityHealth.Hp);
         }
 

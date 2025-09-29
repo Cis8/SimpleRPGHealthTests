@@ -92,7 +92,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var step = new ApplyBarrierStep();
             step.Process(info);
 
-            Assert.AreEqual(RAW - BARRIER, info.Amounts.NetAmount);
+            Assert.AreEqual(RAW - BARRIER, info.Amounts.Current);
             Assert.AreEqual(0, eh.Barrier);
         }
 
@@ -106,7 +106,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             new ApplyBarrierStep().Process(info);
 
-            Assert.AreEqual(0, info.Amounts.NetAmount);
+            Assert.AreEqual(0, info.Amounts.Current);
             Assert.AreEqual(BARRIER - RAW, eh.Barrier);
         }
 
@@ -120,7 +120,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             new ApplyBarrierStep().Process(info);
 
-            Assert.AreEqual(RAW, info.Amounts.NetAmount);
+            Assert.AreEqual(RAW, info.Amounts.Current);
             Assert.AreEqual(BARRIER, eh.Barrier);
         }
 
@@ -134,7 +134,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             new ApplyBarrierStep().Process(info);
 
-            Assert.AreEqual(RAW - BARRIER, info.Amounts.NetAmount);
+            Assert.AreEqual(RAW - BARRIER, info.Amounts.Current);
             Assert.AreEqual(0, eh.Barrier);
         }
     }

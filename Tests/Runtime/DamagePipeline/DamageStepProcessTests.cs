@@ -14,14 +14,14 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
         private class ZeroDamageStep : DamageStep {
             public override string DisplayName => "Zero";
             public override DamageInfo ProcessStep(DamageInfo data) {
-                data.Amounts.NetAmount = 0;
+                data.Amounts.Current = 0;
                 return data;
             }
         }
         private class AnotherZeroDamageStep : DamageStep {
             public override string DisplayName => "Zero2";
             public override DamageInfo ProcessStep(DamageInfo data) {
-                data.Amounts.NetAmount = 0;
+                data.Amounts.Current = 0;
                 return data;
             }
         }
@@ -30,7 +30,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             public RaiseDamageStep(long value){ _value = value; }
             public override string DisplayName => "Raise";
             public override DamageInfo ProcessStep(DamageInfo data){
-                data.Amounts.NetAmount = _value;
+                data.Amounts.Current = _value;
                 return data;
             }
         }
@@ -39,7 +39,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             public PartialReduceStep(long reduceTo){ _reduceTo = reduceTo; }
             public override string DisplayName => "Partial";
             public override DamageInfo ProcessStep(DamageInfo data){
-                data.Amounts.NetAmount = _reduceTo;
+                data.Amounts.Current = _reduceTo;
                 return data;
             }
         }

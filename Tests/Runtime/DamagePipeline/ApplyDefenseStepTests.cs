@@ -1,3 +1,4 @@
+using System.Linq;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgHealth;
@@ -128,8 +129,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             var processed = step.Process(info);
 
-            Assert.AreEqual(EXPECTED, processed.Amounts.NetAmount);
-            Assert.AreEqual(EXPECTED, processed.Amounts.DefReducedAmount);
+            Assert.AreEqual(EXPECTED, processed.Amounts.Current);
+            var rec1 = processed.Amounts.Records.Last();
+            Assert.AreEqual(RAW, rec1.Pre);
+            Assert.AreEqual(EXPECTED, rec1.Post);
         }
 
         [Test]
@@ -162,8 +165,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var step = new ApplyDefenseStep();
             var processed = step.Process(info);
 
-            Assert.AreEqual(EXPECTED, processed.Amounts.NetAmount);
-            Assert.AreEqual(EXPECTED, processed.Amounts.DefReducedAmount);
+            Assert.AreEqual(EXPECTED, processed.Amounts.Current);
+            var rec2 = processed.Amounts.Records.Last();
+            Assert.AreEqual(RAW, rec2.Pre);
+            Assert.AreEqual(EXPECTED, rec2.Post);
         }
     }
 }
