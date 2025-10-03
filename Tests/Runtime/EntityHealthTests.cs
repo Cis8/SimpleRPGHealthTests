@@ -20,12 +20,22 @@ namespace ElectricDrill.SoapRpgHealthTests
         private const long MAX_HP = 100;
 
         // Minimal mock ScriptableObjects
-        public class MockSource : Source
+        public class MockDmgSource : DmgSource
         {
-            public static MockSource Create()
+            public static MockDmgSource Create()
             {
-                var s = CreateInstance<MockSource>();
-                s.name = "TestSource";
+                var s = CreateInstance<MockDmgSource>();
+                s.name = "TestDmgSource";
+                return s;
+            }
+        }
+        
+        public class MockHealSource : HealSource
+        {
+            public static MockHealSource Create()
+            {
+                var s = CreateInstance<MockHealSource>();
+                s.name = "TestHealSource";
                 return s;
             }
         }
@@ -125,7 +135,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             var pre = PreDmgInfo.Builder
                 .WithAmount(amount)
                 .WithType(MockDmgType.Create())
-                .WithSource(MockSource.Create())
+                .WithSource(MockDmgSource.Create())
                 .WithTarget(_mockEntityCore.Object)
                 .WithDealer(_mockDealerCore.Object)
                 .Build();
@@ -205,7 +215,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             _entityHealth.TakeDamage(BuildPre(30)); // HP 70
             _entityHealth.Heal(PreHealInfo.Builder
                 .WithAmount(50)
-                .WithSource(MockSource.Create())
+                .WithSource(MockHealSource.Create())
                 .WithHealer(_mockEntityCore.Object)
                 .Build());
             Assert.AreEqual(MAX_HP, _entityHealth.Hp);

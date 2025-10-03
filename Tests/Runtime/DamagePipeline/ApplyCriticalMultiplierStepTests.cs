@@ -18,10 +18,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             }
         }
 
-        private class MockSource : Source
+        private class MockDmgSource : DmgSource
         {
-            public static MockSource Create() {
-                var s = CreateInstance<MockSource>();
+            public static MockDmgSource Create() {
+                var s = CreateInstance<MockDmgSource>();
                 s.name = "CritSource";
                 return s;
             }
@@ -41,7 +41,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var pre = PreDmgInfo.Builder
                 .WithAmount(raw)
                 .WithType(MockDmgType.Create())
-                .WithSource(MockSource.Create())
+                .WithSource(MockDmgSource.Create())
                 .WithTarget(target)
                 .WithDealer(dealer)
                 .WithIsCritical(crit)
