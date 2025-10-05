@@ -101,7 +101,6 @@ namespace ElectricDrill.SoapRpgHealthTests
 
             // Events
             SetPriv("_preDmgInfoEvent", ScriptableObject.CreateInstance<PreDmgGameEvent>());
-            SetPriv("_takenDmgInfoEvent", ScriptableObject.CreateInstance<TakenDmgGameEvent>());
             SetPriv("_damageResolutionEvent", ScriptableObject.CreateInstance<DamageResolutionGameEvent>());
             SetPriv("_entityDiedEvent", ScriptableObject.CreateInstance<EntityDiedGameEvent>());
             SetPriv("_maxHealthChangedEvent", ScriptableObject.CreateInstance<EntityMaxHealthChangedGameEvent>());

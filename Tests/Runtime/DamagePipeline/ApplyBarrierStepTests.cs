@@ -48,7 +48,6 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
                     ?.SetValue(eh, so);
 
             SetEvt("_preDmgInfoEvent", ScriptableObject.CreateInstance<PreDmgGameEvent>());
-            SetEvt("_takenDmgInfoEvent", ScriptableObject.CreateInstance<TakenDmgGameEvent>());
             SetEvt("_damageResolutionEvent", ScriptableObject.CreateInstance<DamageResolutionGameEvent>());
             SetEvt("_entityDiedEvent", ScriptableObject.CreateInstance<EntityDiedGameEvent>());
             SetEvt("_maxHealthChangedEvent", ScriptableObject.CreateInstance<EntityMaxHealthChangedGameEvent>());
