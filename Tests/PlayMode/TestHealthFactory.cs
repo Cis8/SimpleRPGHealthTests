@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using UnityEngine;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Events;
 using ElectricDrill.SoapRpgFramework.Stats;
@@ -8,8 +7,10 @@ using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRPGHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
+using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
+using UnityEngine;
 
 namespace Tests.PlayMode.Utils
 {
@@ -79,9 +80,24 @@ namespace Tests.PlayMode.Utils
             }
             else
             {
-                // Ensure provider points to the shared config (in case another test created a different one before)
                 SetConfigProviderInstance(config);
             }
+
+            // Ensure default damage calculation strategy exists (prevents "No Damage Calculation Strategy" errors)
+            void EnsureDefaultStrategy()
+            {
+                if (config.DefaultDamageCalculationCalculationStrategy != null) return;
+
+                var strat = ScriptableObject.CreateInstance<DamageCalculationStrategy>();
+                strat.name = "Auto_DefaultDamageCalculationStrategy";
+                strat.steps.Add(new ApplyCriticalMultiplierStep());
+                strat.steps.Add(new ApplyBarrierStep());
+                strat.steps.Add(new ApplyDefenseStep());
+                strat.steps.Add(new ApplyDmgModifiersStep());
+
+                config.DefaultDamageCalculationCalculationStrategy = strat;
+            }
+            EnsureDefaultStrategy();
 
             // GameObject inactive so Awake sees injected fields
             var go = new GameObject(name);
@@ -177,23 +193,7 @@ namespace Tests.PlayMode.Utils
 
         private static void SetConfigProviderInstance(SoapRpgHealthConfig config)
         {
-            // Force override provider instance to guarantee test isolation
-            var providerType = typeof(SoapRpgHealthConfigProvider);
-            var field = providerType.GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            if (field != null)
-            {
-                field.SetValue(null, null); // clear previous
-                field.SetValue(null, config);
-            }
-            else
-            {
-                var prop = providerType.GetProperty("Instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-                if (prop != null && prop.CanWrite)
-                {
-                    prop.SetValue(null, null);
-                    prop.SetValue(null, config);
-                }
-            }
+            SoapRpgHealthConfigProvider.Instance = config;
         }
 
         public static PreDmgInfo BuildPre(long amount, HealthEntityBundle dealer, HealthEntityBundle target,
@@ -254,6 +254,30 @@ namespace Tests.PlayMode.Utils
         }
 
         /// <summary>
+        /// Inject a flat (raw long) stat value into an EntityStats (non-percentage defensive or similar).
+        /// </summary>
+        public static void InjectFlatStat(EntityStats stats, Stat stat, long value)
+        {
+            if (stats == null || stat == null) return;
+
+            if (stats._fixedBaseStatsStatSet == null)
+            {
+                stats._fixedBaseStatsStatSet = ScriptableObject.CreateInstance<StatSet>();
+                stats.InitializeFixedBaseStats();
+            }
+
+            if (!stats.StatSet.Contains(stat))
+            {
+                if (!stats._fixedBaseStatsStatSet._stats.Contains(stat))
+                    stats._fixedBaseStatsStatSet._stats.Add(stat);
+                stats.InitializeFixedBaseStats();
+            }
+
+            stats.SetFixed(stat, value);
+            stats.StatsCache.Invalidate(stat);
+        }
+
+        /// <summary>
         /// Creates a LifestealConfig with a single mapping (dmgType -> lifestealStatConfig) and assigns it to the provided config.
         /// Returns the created LifestealConfig so tests can Destroy it.
         /// </summary>
@@ -280,6 +304,54 @@ namespace Tests.PlayMode.Utils
             lifestealConfig.SetMapping(dmgType, lifestealStat, lifestealSource);
 
             return lifestealConfig;
+        }
+
+        public static void SetPrivateField(object obj, string fieldName, object value)
+        {
+            if (obj == null) return;
+            obj.GetType()
+               .GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+               ?.SetValue(obj, value);
+        }
+
+        /// <summary>
+        /// Creates a DamageCalculationStrategy with steps ordered:
+        /// Critical -> Barrier -> Defense -> Weakness/Resistances (ApplyDmgModifiers).
+        /// No reflection: we rely on the concrete step classes directly.
+        /// </summary>
+        public static DamageCalculationStrategy CreateCritBarrierDefenseWeaknessStrategy()
+        {
+            var strat = ScriptableObject.CreateInstance<DamageCalculationStrategy>();
+            strat.steps.Add(new ApplyCriticalMultiplierStep());
+            strat.steps.Add(new ApplyBarrierStep());
+            strat.steps.Add(new ApplyDefenseStep());
+            strat.steps.Add(new ApplyDmgModifiersStep());
+            return strat;
+        }
+
+        /// <summary>
+        /// Configures lifesteal so that its basis is the damage amount recorded AFTER the Critical step (Post).
+        /// Uses Step mode (no reflection).
+        /// Overwrites any existing mapping for the dmgType.
+        /// </summary>
+        public static LifestealStatConfig ConfigureLifestealBasisAfterCritical(
+            LifestealConfig cfg,
+            DmgType dmgType,
+            Stat lifestealStat,
+            HealSource lifestealSource)
+        {
+            if (!cfg) throw new ArgumentNullException(nameof(cfg));
+            if (!dmgType) throw new ArgumentNullException(nameof(dmgType));
+            if (!lifestealStat) throw new ArgumentNullException(nameof(lifestealStat));
+            if (!lifestealSource) throw new ArgumentNullException(nameof(lifestealSource));
+
+            var selector = new LifestealAmountSelector(
+                LifestealBasisMode.Step,
+                typeof(ApplyCriticalMultiplierStep).AssemblyQualifiedName,
+                StepValuePoint.Post);
+
+            // Overwrite mapping with desired selector.
+            return cfg.SetMapping(dmgType, lifestealStat, lifestealSource, selector, overwrite: true);
         }
     }
 }
