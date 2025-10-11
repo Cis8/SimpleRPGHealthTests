@@ -11,14 +11,14 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 {
     public class ApplyDefenseStepTests
     {
-        private class MockFlatDmgReductionFn : FlatDmgReductionFn
+        private class MockFlatDamageReductionFn : FlatDamageReductionFn
         {
             private long _result;
             public void Set(long r) => _result = r;
             public override long ReducedDmg(long amount, double defensiveStatValue) => _result;
         }
 
-        private class MockFlatDefReductionFn : FlatDefReductionFn
+        private class MockFlatDefenseReductionFn : FlatDefenseReductionFn
         {
             private long _result;
             public void Set(long r) => _result = r;
@@ -117,7 +117,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             const long EXPECTED = 70;
 
             var defStat = ScriptableObject.CreateInstance<Stat>();
-            var dmgFn = ScriptableObject.CreateInstance<MockFlatDmgReductionFn>();
+            var dmgFn = ScriptableObject.CreateInstance<MockFlatDamageReductionFn>();
             dmgFn.Set(EXPECTED);
 
             var (target, dealer, _, _) = MakeEntities(defensiveValue: DEF_VAL, defensiveStat: defStat);
@@ -147,10 +147,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var defStat = ScriptableObject.CreateInstance<Stat>();
             var pierceStat = ScriptableObject.CreateInstance<Stat>();
 
-            var defFn = ScriptableObject.CreateInstance<MockFlatDefReductionFn>();
+            var defFn = ScriptableObject.CreateInstance<MockFlatDefenseReductionFn>();
             defFn.Set(REDUCED_DEF);
 
-            var dmgFn = ScriptableObject.CreateInstance<MockFlatDmgReductionFn>();
+            var dmgFn = ScriptableObject.CreateInstance<MockFlatDamageReductionFn>();
             dmgFn.Set(EXPECTED);
 
             var (target, dealer, _, _) = MakeEntities(
