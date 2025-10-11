@@ -56,7 +56,7 @@ namespace ElectricDrill.SoapRpgHealthTests.Runtime.Heal
             var selector = new LifestealAmountSelector();
             // configure for Step / DefStep / Pre
             SetPrivate(selector, "_mode", LifestealBasisMode.Step);
-            selector.SetStepType(typeof(DefStep));
+            selector.StepType = typeof(DefStep);
             SetPrivate(selector, "_stepPoint", StepValuePoint.Pre);
             Assert.AreEqual(100, selector.Evaluate(amounts));
             // Post
@@ -70,7 +70,7 @@ namespace ElectricDrill.SoapRpgHealthTests.Runtime.Heal
             var amounts = BuildAmounts();
             var selector = new LifestealAmountSelector();
             SetPrivate(selector, "_mode", LifestealBasisMode.Step);
-            selector.SetStepType(typeof(UnusedStep));
+            selector.StepType = typeof(UnusedStep);
             Assert.AreEqual(40, selector.Evaluate(amounts));
         }
 
