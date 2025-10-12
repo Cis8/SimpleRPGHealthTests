@@ -25,22 +25,22 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             public override double ReducedDef(long piercingStatValue, long piercedStatValue) => _result;
         }
 
-        private class MockDmgType : DmgType
+        private class MockDamageType : DamageType
         {
-            public static MockDmgType Create(Stat def = null, DmgReductionFn dmgFn = null, Stat pierce = null, DefReductionFn defFn = null) {
-                var t = CreateInstance<MockDmgType>();
+            public static MockDamageType Create(Stat def = null, DamageReductionFn damageFn = null, Stat pierce = null, DefenseReductionFn defenseFn = null) {
+                var t = CreateInstance<MockDamageType>();
                 t.ReducedBy = def;
-                t.DmgReductionFn = dmgFn;
+                t.DamageReductionFn = damageFn;
                 t.DefensiveStatPiercedBy = pierce;
-                t.DefReductionFn = defFn;
+                t.DefenseReductionFn = defenseFn;
                 return t;
             }
         }
 
-        private class MockDmgSource : DmgSource
+        private class MockDamageSource : DamageSource
         {
-            public static MockDmgSource Create() {
-                var s = CreateInstance<MockDmgSource>();
+            public static MockDamageSource Create() {
+                var s = CreateInstance<MockDamageSource>();
                 s.name = "TestSource";
                 return s;
             }
@@ -62,13 +62,13 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             }
         }
 
-        private DamageInfo MakeDamageInfo(long raw, DmgType type, EntityCore target, EntityCore dealer)
+        private DamageInfo MakeDamageInfo(long raw, DamageType type, EntityCore target, EntityCore dealer)
         {
-            // Build the required PreDmgInfo first (new DamageInfo ctor requirement)
-            var pre = PreDmgInfo.Builder
+            // Build the required PreDamageInfo first (new DamageInfo ctor requirement)
+            var pre = PreDamageInfo.Builder
                 .WithAmount(raw)
                 .WithType(type)
-                .WithSource(MockDmgSource.Create())
+                .WithSource(MockDamageSource.Create())
                 .WithTarget(target)
                 .WithDealer(dealer)
                 .Build();
@@ -122,7 +122,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             var (target, dealer, _, _) = MakeEntities(defensiveValue: DEF_VAL, defensiveStat: defStat);
 
-            var dmgType = MockDmgType.Create(def: defStat, dmgFn: dmgFn);
+            var dmgType = MockDamageType.Create(def: defStat, damageFn: dmgFn);
             var info = MakeDamageInfo(RAW, dmgType, target, dealer);
 
             var step = new ApplyDefenseStep();
@@ -159,7 +159,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
                 defensiveStat: defStat,
                 piercingStat: pierceStat);
 
-            var dmgType = MockDmgType.Create(def: defStat, dmgFn: dmgFn, pierce: pierceStat, defFn: defFn);
+            var dmgType = MockDamageType.Create(def: defStat, damageFn: dmgFn, pierce: pierceStat, defenseFn: defFn);
             var info = MakeDamageInfo(RAW, dmgType, target, dealer);
 
             var step = new ApplyDefenseStep();

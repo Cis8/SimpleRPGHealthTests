@@ -13,16 +13,16 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 {
     public class ApplyBarrierStepTests
     {
-        private class MockDmgType : DmgType {
-            public static MockDmgType Create(bool ignoresBarrier = false) {
-                var t = CreateInstance<MockDmgType>();
+        private class MockDamageType : DamageType {
+            public static MockDamageType Create(bool ignoresBarrier = false) {
+                var t = CreateInstance<MockDamageType>();
                 t.IgnoresBarrier = ignoresBarrier;
                 return t;
             }
         }
-        private class MockDmgSource : DmgSource {
-            public static MockDmgSource Create() {
-                var s = CreateInstance<MockDmgSource>();
+        private class MockDamageSource : DamageSource {
+            public static MockDamageSource Create() {
+                var s = CreateInstance<MockDamageSource>();
                 s.name = "BarrierTestSource";
                 return s;
             }
@@ -35,11 +35,11 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var stats = go.AddComponent<EntityStats>();
             var eh = go.AddComponent<EntityHealth>();
 
-            eh.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = maxHp };
-            eh.totalMaxHp = new LongRef { UseConstant = true };
-            eh.hp = new LongRef { UseConstant = true, ConstantValue = maxHp };
-            eh.barrier = new LongRef { UseConstant = true, ConstantValue = barrierVal };
-            eh.deathThreshold = LongVarFactory.CreateLongVar(0);
+            eh._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = maxHp };
+            eh._totalMaxHp = new LongRef { UseConstant = true };
+            eh._hp = new LongRef { UseConstant = true, ConstantValue = maxHp };
+            eh._barrier = new LongRef { UseConstant = true, ConstantValue = barrierVal };
+            eh._deathThreshold = LongVarFactory.CreateLongVar(0);
             eh.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
             // Mandatory events
@@ -62,12 +62,12 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             return (eh, core);
         }
 
-        private DamageInfo MakeDamageInfo(long raw, DmgType type, EntityCore target, EntityCore dealer)
+        private DamageInfo MakeDamageInfo(long raw, DamageType type, EntityCore target, EntityCore dealer)
         {
-            var pre = PreDmgInfo.Builder
+            var pre = PreDamageInfo.Builder
                 .WithAmount(raw)
                 .WithType(type)
-                .WithSource(MockDmgSource.Create())
+                .WithSource(MockDamageSource.Create())
                 .WithTarget(target)
                 .WithDealer(dealer)
                 .Build();
@@ -86,7 +86,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             const long RAW = 50;
             const long BARRIER = 20;
             var (eh, core) = MakeEntity(100, BARRIER);
-            var info = MakeDamageInfo(RAW, MockDmgType.Create(), core, core);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(), core, core);
 
             var step = new ApplyBarrierStep();
             step.Process(info);
@@ -101,7 +101,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             const long RAW = 15;
             const long BARRIER = 50;
             var (eh, core) = MakeEntity(100, BARRIER);
-            var info = MakeDamageInfo(RAW, MockDmgType.Create(), core, core);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(), core, core);
 
             new ApplyBarrierStep().Process(info);
 
@@ -115,7 +115,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             const long RAW = 40;
             const long BARRIER = 25;
             var (eh, core) = MakeEntity(100, BARRIER);
-            var info = MakeDamageInfo(RAW, MockDmgType.Create(ignoresBarrier: true), core, core);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(ignoresBarrier: true), core, core);
 
             new ApplyBarrierStep().Process(info);
 
@@ -129,7 +129,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             const long RAW = 200;
             const long BARRIER = 30;
             var (eh, core) = MakeEntity(100, BARRIER);
-            var info = MakeDamageInfo(RAW, MockDmgType.Create(), core, core);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(), core, core);
 
             new ApplyBarrierStep().Process(info);
 

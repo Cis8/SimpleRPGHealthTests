@@ -20,11 +20,11 @@ namespace ElectricDrill.SoapRpgHealthTests
         private const long MAX_HP = 100;
 
         // Minimal mock ScriptableObjects
-        public class MockDmgSource : DmgSource
+        public class MockDamageSource : DamageSource
         {
-            public static MockDmgSource Create()
+            public static MockDamageSource Create()
             {
-                var s = CreateInstance<MockDmgSource>();
+                var s = CreateInstance<MockDamageSource>();
                 s.name = "TestDmgSource";
                 return s;
             }
@@ -40,11 +40,11 @@ namespace ElectricDrill.SoapRpgHealthTests
             }
         }
 
-        public class MockDmgType : DmgType
+        public class MockDamageType : DamageType
         {
-            public static MockDmgType Create()
+            public static MockDamageType Create()
             {
-                var t = CreateInstance<MockDmgType>();
+                var t = CreateInstance<MockDamageType>();
                 return t;
             }
         }
@@ -92,11 +92,11 @@ namespace ElectricDrill.SoapRpgHealthTests
             _entityHealth._core = _mockEntityCore.Object;
             _entityHealth._stats = _mockEntityStats.Object;
 
-            _entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
-            _entityHealth.totalMaxHp = new LongRef { UseConstant = true };
-            _entityHealth.hp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
-            _entityHealth.deathThreshold = LongVarFactory.CreateLongVar(0);
-            _entityHealth.barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
+            _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
+            _entityHealth._totalMaxHp = new LongRef { UseConstant = true };
+            _entityHealth._hp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
+            _entityHealth._deathThreshold = LongVarFactory.CreateLongVar(0);
+            _entityHealth._barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
             _entityHealth.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
             // Events
@@ -112,7 +112,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             _entityHealth.SetupBaseMaxHp();
 
             var defaultStrategy = TestDamageCalculationStrategy.Create(info => info);
-            SetPriv("_baseDamageCalculationStrategy", defaultStrategy);
+            _entityHealth._customDamageCalculationStrategy = defaultStrategy;
         }
 
         private void SetPriv(string field, object value) =>
@@ -129,12 +129,12 @@ namespace ElectricDrill.SoapRpgHealthTests
             Object.DestroyImmediate(_go);
         }
 
-        private PreDmgInfo BuildPre(long amount, bool ignore = false)
+        private PreDamageInfo BuildPre(long amount, bool ignore = false)
         {
-            var pre = PreDmgInfo.Builder
+            var pre = PreDamageInfo.Builder
                 .WithAmount(amount)
-                .WithType(MockDmgType.Create())
-                .WithSource(MockDmgSource.Create())
+                .WithType(MockDamageType.Create())
+                .WithSource(MockDamageSource.Create())
                 .WithTarget(_mockEntityCore.Object)
                 .WithDealer(_mockDealerCore.Object)
                 .Build();
@@ -224,8 +224,8 @@ namespace ElectricDrill.SoapRpgHealthTests
         public void TotalMaxHp_WithFlatAndPercentage()
         {
             // Reconfigure
-            _entityHealth.baseMaxHp = new LongRef { UseConstant = true, ConstantValue = 100 };
-            _entityHealth.totalMaxHp = new LongRef { UseConstant = true };
+            _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = 100 };
+            _entityHealth._totalMaxHp = new LongRef { UseConstant = true };
             _entityHealth.SetupBaseMaxHp();
 
             _entityHealth.AddMaxHpFlatModifier(50); // 150

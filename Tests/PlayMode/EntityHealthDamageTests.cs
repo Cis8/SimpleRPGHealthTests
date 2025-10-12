@@ -24,11 +24,11 @@ namespace ElectricDrill.SimpleRpgHealthTests
         public void TearDown()
         {
             Object.DestroyImmediate(_attacker.Go);
-            Object.DestroyImmediate(_attacker.DefaultDmgType);
-            Object.DestroyImmediate(_attacker.DefaultDmgSource);
+            Object.DestroyImmediate(_attacker.DefaultDamageType);
+            Object.DestroyImmediate(_attacker.DefaultDamageSource);
             Object.DestroyImmediate(_target.Go);
-            Object.DestroyImmediate(_target.DefaultDmgType);
-            Object.DestroyImmediate(_target.DefaultDmgSource);
+            Object.DestroyImmediate(_target.DefaultDamageType);
+            Object.DestroyImmediate(_target.DefaultDamageSource);
             Object.DestroyImmediate(_attacker.Config); // shared config is the attacker's
         }
 

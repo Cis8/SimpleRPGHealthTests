@@ -54,8 +54,8 @@ namespace Tests.PlayMode.Utils
             public EntityStats Stats;
             public EntityHealth Health;
             public SoapRpgHealthConfig Config;
-            public DmgType DefaultDmgType;
-            public DmgSource DefaultDmgSource;
+            public DamageType DefaultDamageType;
+            public DamageSource DefaultDamageSource;
             public HealthEventsBundle Events; // events actually used (shared or per-entity)
         }
 
@@ -161,11 +161,11 @@ namespace Tests.PlayMode.Utils
             SetPrivate("_onDeathStrategy", onDeathStrategy);
 
             // Internal (accessible directly)
-            health.baseMaxHp = baseMax;
-            health.totalMaxHp = totalMax;
-            health.hp = hp;
-            health.barrier = barrier;
-            health.deathThreshold = deathThreshold;
+            health._baseMaxHp = baseMax;
+            health._totalMaxHp = totalMax;
+            health._hp = hp;
+            health._barrier = barrier;
+            health._deathThreshold = deathThreshold;
             health.HealthCanBeNegative = allowNegative;
 
             healthMutator?.Invoke(health);
@@ -173,9 +173,9 @@ namespace Tests.PlayMode.Utils
             go.SetActive(true);
 
             // Dmg type & source
-            var dmgType = ScriptableObject.CreateInstance<DmgType>();
+            var dmgType = ScriptableObject.CreateInstance<DamageType>();
             dmgType.name = $"{name}_DmgType";
-            var dmgSource = ScriptableObject.CreateInstance<DmgSource>();
+            var dmgSource = ScriptableObject.CreateInstance<DamageSource>();
             dmgSource.name = $"{name}_DmgSource";
 
             return new HealthEntityBundle
@@ -185,8 +185,8 @@ namespace Tests.PlayMode.Utils
                 Stats = stats,
                 Health = health,
                 Config = config,
-                DefaultDmgType = dmgType,
-                DefaultDmgSource = dmgSource,
+                DefaultDamageType = dmgType,
+                DefaultDamageSource = dmgSource,
                 Events = evtBundle
             };
         }
@@ -196,13 +196,13 @@ namespace Tests.PlayMode.Utils
             SoapRpgHealthConfigProvider.Instance = config;
         }
 
-        public static PreDmgInfo BuildPre(long amount, HealthEntityBundle dealer, HealthEntityBundle target,
-            DmgType type = null, DmgSource source = null, bool crit = false, double critMult = 1d, bool ignore = false)
+        public static PreDamageInfo BuildPre(long amount, HealthEntityBundle dealer, HealthEntityBundle target,
+            DamageType type = null, DamageSource source = null, bool crit = false, double critMult = 1d, bool ignore = false)
         {
-            var dmgType = type ?? dealer.DefaultDmgType;
-            var dmgSource = source ?? dealer.DefaultDmgSource;
+            var dmgType = type ?? dealer.DefaultDamageType;
+            var dmgSource = source ?? dealer.DefaultDamageSource;
 
-            var pre = PreDmgInfo.Builder
+            var pre = PreDamageInfo.Builder
                 .WithAmount(amount)
                 .WithType(dmgType)
                 .WithSource(dmgSource)
@@ -278,10 +278,10 @@ namespace Tests.PlayMode.Utils
         }
 
         /// <summary>
-        /// Creates a LifestealConfig with a single mapping (dmgType -> lifestealStatConfig) and assigns it to the provided config.
+        /// Creates a LifestealConfig with a single mapping (_damageType -> lifestealStatConfig) and assigns it to the provided config.
         /// Returns the created LifestealConfig so tests can Destroy it.
         /// </summary>
-        public static LifestealConfig AssignLifestealMapping(SoapRpgHealthConfig config, DmgType dmgType, Stat lifestealStat, HealSource lifestealSource)
+        public static LifestealConfig AssignLifestealMapping(SoapRpgHealthConfig config, DamageType damageType, Stat lifestealStat, HealSource lifestealSource)
         {
             // Prefer existing lifesteal config if already set, else create a fresh one.
             var lifestealConfig = config.LifestealConfig;
@@ -301,7 +301,7 @@ namespace Tests.PlayMode.Utils
             }
 
             // Use internal API (no reflection) to declare mapping.
-            lifestealConfig.SetMapping(dmgType, lifestealStat, lifestealSource);
+            lifestealConfig.SetMapping(damageType, lifestealStat, lifestealSource);
 
             return lifestealConfig;
         }
@@ -332,16 +332,16 @@ namespace Tests.PlayMode.Utils
         /// <summary>
         /// Configures lifesteal so that its basis is the damage amount recorded AFTER the Critical step (Post).
         /// Uses Step mode (no reflection).
-        /// Overwrites any existing mapping for the dmgType.
+        /// Overwrites any existing mapping for the _damageType.
         /// </summary>
         public static LifestealStatConfig ConfigureLifestealBasisAfterCritical(
             LifestealConfig cfg,
-            DmgType dmgType,
+            DamageType damageType,
             Stat lifestealStat,
             HealSource lifestealSource)
         {
             if (!cfg) throw new ArgumentNullException(nameof(cfg));
-            if (!dmgType) throw new ArgumentNullException(nameof(dmgType));
+            if (!damageType) throw new ArgumentNullException(nameof(damageType));
             if (!lifestealStat) throw new ArgumentNullException(nameof(lifestealStat));
             if (!lifestealSource) throw new ArgumentNullException(nameof(lifestealSource));
 
@@ -351,7 +351,7 @@ namespace Tests.PlayMode.Utils
                 StepValuePoint.Post);
 
             // Overwrite mapping with desired selector.
-            return cfg.SetMapping(dmgType, lifestealStat, lifestealSource, selector, overwrite: true);
+            return cfg.SetMapping(damageType, lifestealStat, lifestealSource, selector, overwrite: true);
         }
     }
 }

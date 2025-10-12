@@ -9,8 +9,8 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 {
     public class DamageStepProcessTests
     {
-        private class MockDmgType : DmgType { public static MockDmgType Create() => CreateInstance<MockDmgType>(); }
-        private class MockDmgSource : DmgSource { public static MockDmgSource Create() => CreateInstance<MockDmgSource>(); }
+        private class MockDamageType : DamageType { public static MockDamageType Create() => CreateInstance<MockDamageType>(); }
+        private class MockDamageSource : DamageSource { public static MockDamageSource Create() => CreateInstance<MockDamageSource>(); }
 
         private class ZeroDamageStep : DamageStep {
             public override string DisplayName => "Zero";
@@ -51,10 +51,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             var targetCore = goTarget.AddComponent<EntityCore>();
             var dealerCore = goDealer.AddComponent<EntityCore>();
 
-            var pre = PreDmgInfo.Builder
+            var pre = PreDamageInfo.Builder
                 .WithAmount(amount)
-                .WithType(MockDmgType.Create())
-                .WithSource(MockDmgSource.Create())
+                .WithType(MockDamageType.Create())
+                .WithSource(MockDamageSource.Create())
                 .WithTarget(targetCore)
                 .WithDealer(dealerCore)
                 .Build();

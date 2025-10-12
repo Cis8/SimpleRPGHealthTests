@@ -19,9 +19,9 @@ namespace ElectricDrill.SoapRpgHealthTests.Runtime.Heal
             public override DamageInfo ProcessStep(DamageInfo data) => data;
         }
 
-        private DmgAmountInfo BuildAmounts()
+        private DamageAmountInfo BuildAmounts()
         {
-            var a = new DmgAmountInfo(100);
+            var a = new DamageAmountInfo(100);
             // Simulate defense reducing 100 -> 70
             a.RecordStep(typeof(DefStep), 100, 70);
             // Simulate barrier reducing 70 -> 40

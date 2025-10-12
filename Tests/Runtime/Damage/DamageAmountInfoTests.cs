@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace ElectricDrill.SoapRpgHealthTests.Runtime.Damage
 {
-    public class DmgAmountInfoTests
+    public class DamageAmountInfoTests
     {
         private class StepA : DamageStep
         {
@@ -21,7 +21,7 @@ namespace ElectricDrill.SoapRpgHealthTests.Runtime.Damage
         [Test]
         public void RecordStep_StoresTypePrePost()
         {
-            var amounts = new DmgAmountInfo(100);
+            var amounts = new DamageAmountInfo(100);
             amounts.RecordStep(typeof(StepA), 100, 80);
             Assert.AreEqual(1, amounts.Records.Count);
             var r = amounts.Records[0];
@@ -33,7 +33,7 @@ namespace ElectricDrill.SoapRpgHealthTests.Runtime.Damage
         [Test]
         public void StepSequence_PreMatchesPreviousPost()
         {
-            var amounts = new DmgAmountInfo(150);
+            var amounts = new DamageAmountInfo(150);
             amounts.RecordStep(typeof(StepA), 150, 120);
             amounts.RecordStep(typeof(StepB), 120, 60);
             Assert.AreEqual(amounts.Records[0].Post, amounts.Records[1].Pre);

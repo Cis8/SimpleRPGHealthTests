@@ -60,12 +60,12 @@ public class ComplexDamagePipelinePlayModeTests
         _flatDmgFn = ScriptableObject.CreateInstance<FlatDamageReductionFn>();
         _percDefFn = ScriptableObject.CreateInstance<PercentageDefenseReductionFn>();
 
-        // Configure DmgType
-        var dmgType = _attacker.DefaultDmgType;
+        // Configure DamageType
+        var dmgType = _attacker.DefaultDamageType;
         dmgType.ReducedBy = _defensiveStat;
-        dmgType.DmgReductionFn = _flatDmgFn;
+        dmgType.DamageReductionFn = _flatDmgFn;
         dmgType.DefensiveStatPiercedBy = _piercingStat;
-        dmgType.DefReductionFn = _percDefFn;
+        dmgType.DefenseReductionFn = _percDefFn;
 
         // Assign generic modification stat to config (weakness/resistance step usage)
         _attacker.Config.genericDamageModificationStat = _genericModStat;
@@ -74,9 +74,9 @@ public class ComplexDamagePipelinePlayModeTests
         // Create custom strategy (Critical -> Barrier -> Defense -> Weak/Res)
         var strategy = CreateCritBarrierDefenseWeaknessStrategy();
         // Give attacker a base strategy to prevent "No Damage Calculation Strategy" error
-        SetPrivateField(_attacker.Health, "_baseDamageCalculationStrategy", strategy);
+        _attacker.Health._customDamageCalculationStrategy = strategy;
         // Override target pipeline (defender uses chosen strategy)
-        SetPrivateField(_target.Health, "_overrideDamageCalculationStrategy", strategy);
+        _target.Health._overrideDamageCalculationStrategy = strategy;
 
         // Lifesteal mapping + configure basis after critical step post (overwrite with Step/Post)
         var lifestealSource = ScriptableObject.CreateInstance<HealSource>();
@@ -90,10 +90,10 @@ public class ComplexDamagePipelinePlayModeTests
     {
         Object.DestroyImmediate(_attacker.Go);
         Object.DestroyImmediate(_target.Go);
-        Object.DestroyImmediate(_attacker.DefaultDmgType);
-        Object.DestroyImmediate(_attacker.DefaultDmgSource);
-        Object.DestroyImmediate(_target.DefaultDmgType);
-        Object.DestroyImmediate(_target.DefaultDmgSource);
+        Object.DestroyImmediate(_attacker.DefaultDamageType);
+        Object.DestroyImmediate(_attacker.DefaultDamageSource);
+        Object.DestroyImmediate(_target.DefaultDamageType);
+        Object.DestroyImmediate(_target.DefaultDamageSource);
         Object.DestroyImmediate(_attacker.Config);
         Object.DestroyImmediate(_defensiveStat);
         Object.DestroyImmediate(_piercingStat);
@@ -109,8 +109,8 @@ public class ComplexDamagePipelinePlayModeTests
     {
         yield return null;
         
-        // Set attacker hp to 50 to see lifesteal effect (direct set to avoid modifiers)
-        var hpField = typeof(EntityHealth).GetField("hp", BindingFlags.Instance | BindingFlags.NonPublic);
+        // Set attacker _hp to 50 to see lifesteal effect (direct set to avoid modifiers)
+        var hpField = typeof(EntityHealth).GetField("_hp", BindingFlags.Instance | BindingFlags.NonPublic);
         var attackerHpRef = (LongRef)hpField.GetValue(_attacker.Health);
         attackerHpRef.Value = 50;
         Assert.AreEqual(50, _attacker.Health.Hp, "Attacker HP should be 50 after direct set.");

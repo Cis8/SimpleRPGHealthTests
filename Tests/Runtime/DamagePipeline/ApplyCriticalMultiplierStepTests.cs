@@ -10,18 +10,18 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 {
     public class ApplyCriticalMultiplierStepTests
     {
-        private class MockDmgType : DmgType
+        private class MockDamageType : DamageType
         {
-            public static MockDmgType Create() {
-                var t = CreateInstance<MockDmgType>();
+            public static MockDamageType Create() {
+                var t = CreateInstance<MockDamageType>();
                 return t;
             }
         }
 
-        private class MockDmgSource : DmgSource
+        private class MockDamageSource : DamageSource
         {
-            public static MockDmgSource Create() {
-                var s = CreateInstance<MockDmgSource>();
+            public static MockDamageSource Create() {
+                var s = CreateInstance<MockDamageSource>();
                 s.name = "CritSource";
                 return s;
             }
@@ -38,10 +38,10 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
         private DamageInfo MakeDamageInfo(long raw, bool crit, double mult, EntityCore target, EntityCore dealer)
         {
-            var pre = PreDmgInfo.Builder
+            var pre = PreDamageInfo.Builder
                 .WithAmount(raw)
-                .WithType(MockDmgType.Create())
-                .WithSource(MockDmgSource.Create())
+                .WithType(MockDamageType.Create())
+                .WithSource(MockDamageSource.Create())
                 .WithTarget(target)
                 .WithDealer(dealer)
                 .WithIsCritical(crit)
