@@ -125,7 +125,7 @@ public class ComplexDamagePipelinePlayModeTests
         
         // --- Step-by-step checks ---
         // Critical step checks: pre 40, post 80
-        Assert.AreEqual(40, damageDealt.FinalDamageInfo.Amounts.GetStepAmount(typeof(ApplyCriticalMultiplierStep)).Pre, "Damage before critical should be 80.");
+        Assert.AreEqual(40, damageDealt.FinalDamageInfo.Amounts.GetStepAmount(typeof(ApplyCriticalMultiplierStep)).Pre, "Damage before critical should be 40.");
         Assert.AreEqual(80, damageDealt.FinalDamageInfo.Amounts.GetStepAmount(typeof(ApplyCriticalMultiplierStep)).Post, "Damage after critical should be 80.");
 
         // Barrier step checks: pre 80, post 50 (30 absorbed by barrier)
