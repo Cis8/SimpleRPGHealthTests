@@ -75,11 +75,19 @@ namespace Tests.PlayMode.Utils
             if (config == null)
             {
                 config = ScriptableObject.CreateInstance<SoapRpgHealthConfig>();
+                // Ensure a default OnDeathStrategy on the config (no reflection)
+                var cfgDeath = ScriptableObject.CreateInstance<TestOnDeathStrategy>();
+                config.DefaultOnDeathStrategy = cfgDeath;
                 configMutator?.Invoke(config);
                 SetConfigProviderInstance(config);
             }
             else
             {
+                if (config.DefaultOnDeathStrategy == null)
+                {
+                    var cfgDeath = ScriptableObject.CreateInstance<TestOnDeathStrategy>();
+                    config.DefaultOnDeathStrategy = cfgDeath;
+                }
                 SetConfigProviderInstance(config);
             }
 
@@ -156,9 +164,9 @@ namespace Tests.PlayMode.Utils
             SetPrivate("_preHealEvent", evtBundle.PreHeal);
             SetPrivate("_entityHealedEvent", evtBundle.Healed);
 
-            // OnDeathStrategy (private)
+            // OnDeathStrategy override (use public property, not reflection)
             var onDeathStrategy = ScriptableObject.CreateInstance<TestOnDeathStrategy>();
-            SetPrivate("_onDeathStrategy", onDeathStrategy);
+            health.OverrideOnDeathStrategy = onDeathStrategy;
 
             // Internal (accessible directly)
             health._baseMaxHp = baseMax;

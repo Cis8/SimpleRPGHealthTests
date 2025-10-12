@@ -40,7 +40,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             eh._hp = new LongRef { UseConstant = true, ConstantValue = maxHp };
             eh._barrier = new LongRef { UseConstant = true, ConstantValue = barrierVal };
             eh._deathThreshold = LongVarFactory.CreateLongVar(0);
-            eh.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
+            eh.OverrideOnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
             // Mandatory events
             void SetEvt(string field, ScriptableObject so) =>

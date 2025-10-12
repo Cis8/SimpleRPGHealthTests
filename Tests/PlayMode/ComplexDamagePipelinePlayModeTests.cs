@@ -68,8 +68,8 @@ public class ComplexDamagePipelinePlayModeTests
         dmgType.DefenseReductionFn = _percDefFn;
 
         // Assign generic modification stat to config (weakness/resistance step usage)
-        _attacker.Config.genericDamageModificationStat = _genericModStat;
-        _target.Config.genericDamageModificationStat = _genericModStat;
+        _attacker.Config.GenericDamageModificationStat = _genericModStat;
+        _target.Config.GenericDamageModificationStat = _genericModStat;
 
         // Create custom strategy (Critical -> Barrier -> Defense -> Weak/Res)
         var strategy = CreateCritBarrierDefenseWeaknessStrategy();

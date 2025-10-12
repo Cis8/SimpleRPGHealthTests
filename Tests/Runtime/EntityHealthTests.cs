@@ -97,7 +97,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             _entityHealth._hp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             _entityHealth._deathThreshold = LongVarFactory.CreateLongVar(0);
             _entityHealth._barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
-            _entityHealth.OnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
+            _entityHealth.OverrideOnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
 
             // Events
             SetPriv("_preDmgInfoEvent", ScriptableObject.CreateInstance<PreDmgGameEvent>());
