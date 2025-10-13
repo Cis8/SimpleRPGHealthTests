@@ -58,7 +58,7 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
 
             eh._core = core;
             eh._stats = stats;
-            eh.SetupBaseMaxHp();
+            eh.SetupMaxHp();
             return (eh, core);
         }
 

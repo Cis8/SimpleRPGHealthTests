@@ -109,7 +109,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             SetPriv("_preHealEvent", ScriptableObject.CreateInstance<PreHealGameEvent>());
             SetPriv("_entityHealedEvent", ScriptableObject.CreateInstance<EntityHealedGameEvent>());
 
-            _entityHealth.SetupBaseMaxHp();
+            _entityHealth.SetupMaxHp();
 
             var defaultStrategy = TestDamageCalculationStrategy.Create(info => info);
             _entityHealth._customDamageCalculationStrategy = defaultStrategy;
@@ -226,7 +226,7 @@ namespace ElectricDrill.SoapRpgHealthTests
             // Reconfigure
             _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = 100 };
             _entityHealth._totalMaxHp = new LongRef { UseConstant = true };
-            _entityHealth.SetupBaseMaxHp();
+            _entityHealth.SetupMaxHp();
 
             _entityHealth.AddMaxHpFlatModifier(50); // 150
             _entityHealth.AddMaxHpPercentageModifier(new Percentage(20)); // +30 = 180
