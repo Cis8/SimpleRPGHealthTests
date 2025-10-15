@@ -2,6 +2,7 @@
 using System.Reflection;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Events;
+using ElectricDrill.SoapRPGFramework.Experience;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
