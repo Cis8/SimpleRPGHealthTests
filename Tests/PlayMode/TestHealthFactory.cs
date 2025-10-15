@@ -2,15 +2,18 @@
 using System.Reflection;
 using ElectricDrill.SoapRpgFramework;
 using ElectricDrill.SoapRpgFramework.Events;
-using ElectricDrill.SoapRPGFramework.Experience;
+using ElectricDrill.SoapRpgFramework.Events;
+using ElectricDrill.SoapRpgFramework.Events;
+using ElectricDrill.SoapRpgFramework.Experience;
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRPGHealth;
+using ElectricDrill.SoapRpgHealth.Config;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
+using ElectricDrill.SoapRpgHealth.OnDeathStrategies;
 using UnityEngine;
 
 namespace Tests.PlayMode.Utils

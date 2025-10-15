@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
 using System.Linq;
 using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRPGFramework.Editor.Utils;
-using ElectricDrill.SoapRPGFramework.Utils;
+using ElectricDrill.SoapRpgFramework.Editor.Utils;
+using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
 

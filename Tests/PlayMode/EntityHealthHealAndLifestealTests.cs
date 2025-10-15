@@ -1,12 +1,12 @@
 ﻿using System.Collections;
+using ElectricDrill.SoapRpgFramework.Stats;
+using ElectricDrill.SoapRpgFramework.Utils;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth.Heal;
 using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRPGHealth;
+using ElectricDrill.SoapRpgHealth.Config;
 using Tests.PlayMode.Utils;
 using static Tests.PlayMode.Utils.TestHealthFactory;
 

@@ -2,9 +2,11 @@
 using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRPGHealth;
+using ElectricDrill.SoapRpgHealth.Config;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
+using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
 using ElectricDrill.SoapRpgHealth.Heal;
 using NUnit.Framework;
 using Tests.PlayMode.Utils;

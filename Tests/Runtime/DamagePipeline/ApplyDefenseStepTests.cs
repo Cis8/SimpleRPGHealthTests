@@ -4,6 +4,10 @@ using ElectricDrill.SoapRpgFramework.Stats;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.SoapRpgHealth.DamageReductionFunctions;
+using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
+using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions;
+using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
 using NUnit.Framework;
 using UnityEngine;
 

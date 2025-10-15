@@ -1,4 +1,5 @@
 using ElectricDrill.SoapRpgHealth;
+using ElectricDrill.SoapRpgHealth.OnDeathStrategies;
 
 namespace ElectricDrill.SoapRpgHealthTests
 {
