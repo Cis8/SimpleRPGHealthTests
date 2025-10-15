@@ -89,8 +89,8 @@ namespace ElectricDrill.SoapRpgHealthTests
 
             _go.AddComponent<EntityHealth>();
             _entityHealth = _go.GetComponent<EntityHealth>();
-            _entityHealth._core = _mockEntityCore.Object;
-            _entityHealth._stats = _mockEntityStats.Object;
+            _entityHealth._entityCore = _mockEntityCore.Object;
+            _entityHealth._entityStats = _mockEntityStats.Object;
 
             _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             _entityHealth._totalMaxHp = new LongRef { UseConstant = true };

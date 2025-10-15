@@ -56,8 +56,8 @@ namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
             SetEvt("_preHealEvent", ScriptableObject.CreateInstance<PreHealGameEvent>());
             SetEvt("_entityHealedEvent", ScriptableObject.CreateInstance<EntityHealedGameEvent>());
 
-            eh._core = core;
-            eh._stats = stats;
+            eh._entityCore = core;
+            eh._entityStats = stats;
             eh.SetupMaxHp();
             return (eh, core);
         }
