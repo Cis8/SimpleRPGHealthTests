@@ -9,9 +9,9 @@ using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Config;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.SoapRpgHealth.Death;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
-using ElectricDrill.SoapRpgHealth.OnDeathStrategies;
 using UnityEngine;
 
 namespace Tests.PlayMode.Utils
