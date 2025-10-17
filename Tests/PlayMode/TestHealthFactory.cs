@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using ElectricDrill.SoapRpgFramework;
+using ElectricDrill.SoapRpgFramework.Attributes;
 using ElectricDrill.SoapRpgFramework.Events;
 using ElectricDrill.SoapRpgFramework.Experience;
 using ElectricDrill.SoapRpgFramework.Stats;
@@ -13,6 +14,7 @@ using ElectricDrill.SoapRpgHealth.Death;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
 using UnityEngine;
+using Attribute = ElectricDrill.SoapRpgFramework.Attributes.Attribute;
 
 namespace Tests.PlayMode.Utils
 {
@@ -54,6 +56,7 @@ namespace Tests.PlayMode.Utils
             public GameObject Go;
             public EntityCore Core;
             public EntityStats Stats;
+            public EntityAttributes Attributes;
             public EntityHealth Health;
             public SoapRpgHealthConfig Config;
             public DamageType DefaultDamageType;
@@ -69,6 +72,7 @@ namespace Tests.PlayMode.Utils
             Action<SoapRpgHealthConfig> configMutator = null,
             Action<EntityHealth> healthMutator = null,
             bool initializeStats = false,
+            bool initializeAttributes = false,
             HealthEventsBundle? sharedEvents = null)
         {
             // Always create a brand new config if one is not explicitly shared.
@@ -127,7 +131,7 @@ namespace Tests.PlayMode.Utils
             stats.UseClassBaseStats = false;
             if (!initializeStats)
                 stats.enabled = false;
-            
+
             var statChangedEvt = ScriptableObject.CreateInstance<StatChangedGameEvent>();
             stats.OnStatChanged = statChangedEvt;
 
@@ -138,7 +142,23 @@ namespace Tests.PlayMode.Utils
                 // Initialize internal fixed base stats structures
                 stats.InitializeFixedBaseStats();
             }
-
+            
+            // Attributes
+            var attributes = go.AddComponent<EntityAttributes>();
+            if (!initializeAttributes)
+                attributes.enabled = false;
+            
+            var attrChangedEvt = ScriptableObject.CreateInstance<AttributeChangedGameEvent>();
+            attributes.OnAttributeChanged = attrChangedEvt;
+            
+            // Ensure a fixed AttributeSet exists (internal field accessible)
+            if (attributes._fixedBaseAttributeSet == null)
+            {
+                attributes._fixedBaseAttributeSet = ScriptableObject.CreateInstance<AttributeSet>();
+                // Initialize internal fixed base attributes structures
+                attributes.InitializeFixedBaseAttributes();
+            }
+            
             var health = go.AddComponent<EntityHealth>();
 
             var events = sharedEvents ?? CreateSharedEvents();
@@ -193,6 +213,7 @@ namespace Tests.PlayMode.Utils
                 Go = go,
                 Core = core,
                 Stats = stats,
+                Attributes = attributes, // added: expose created EntityAttributes
                 Health = health,
                 Config = config,
                 DefaultDamageType = dmgType,
@@ -285,6 +306,34 @@ namespace Tests.PlayMode.Utils
 
             stats.SetFixed(stat, value);
             stats.StatsCache.Invalidate(stat);
+        }
+        
+        /// <summary>
+        /// Inject a flat (raw long) attribute value into an EntityAttributes.
+        /// Ensures the attribute exists in the fixed base attribute set and sets its fixed base value.
+        /// </summary>
+        public static void InjectFlatAttribute(EntityAttributes attributes, Attribute attribute, long value)
+        {
+            if (attributes == null || attribute == null) return;
+            
+            if (attributes._fixedBaseAttributeSet == null)
+            {
+                attributes._fixedBaseAttributeSet = ScriptableObject.CreateInstance<AttributeSet>();
+                attributes.InitializeFixedBaseAttributes();
+            }
+
+            if (!attributes.AttributeSet.Contains(attribute))
+            {
+                if (!attributes._fixedBaseAttributeSet._attributes.Contains(attribute))
+                    attributes._fixedBaseAttributeSet._attributes.Add(attribute);
+                attributes.InitializeFixedBaseAttributes();
+            }
+
+            // Set base value (EntityAttributes API analogous to EntityStats)
+            attributes.SetFixed(attribute, value);
+
+            // Invalidate cache if present
+            attributes.AttributesCache.Invalidate(attribute);
         }
 
         /// <summary>

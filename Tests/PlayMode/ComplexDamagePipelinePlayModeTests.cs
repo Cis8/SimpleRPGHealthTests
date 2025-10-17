@@ -10,7 +10,6 @@ using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFuncti
 using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
 using ElectricDrill.SoapRpgHealth.Heal;
 using NUnit.Framework;
-using Tests.PlayMode.Utils;
 using UnityEngine;
 using UnityEngine.TestTools;
 using static Tests.PlayMode.Utils.TestHealthFactory;
@@ -52,7 +51,8 @@ public class ComplexDamagePipelinePlayModeTests
 
         // Inject stats
         InjectPercentageStat(_attacker.Stats, _lifestealStat, new Percentage(25)); // lifesteal 25%
-        InjectPercentageStat(_attacker.Stats, _piercingStat, new Percentage(20));  // 20% pierce
+        InjectPercentageStat(_attacker.Stats, _piercingStat, new Percentage(20));  // 20% pierce (attacker)
+        // Factory methods now use StatSet.Add internally (fixes previous KeyNotFound for PiercingStat).
         InjectFlatStat(_target.Stats, _defensiveStat, 25);                         // flat defensive value
         // For weakness/resistance generic modification assume 150% (weakness +50%)
         InjectPercentageStat(_target.Stats, _genericModStat, new Percentage(50));
