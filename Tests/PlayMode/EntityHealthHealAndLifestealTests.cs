@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
+using ElectricDrill.SoapRpgHealth.Config;
+using ElectricDrill.SoapRpgHealth.Heal;
 using NUnit.Framework;
+using Tests.PlayMode.Utils;
 using UnityEngine;
 using UnityEngine.TestTools;
-using ElectricDrill.SoapRpgHealth.Heal;
-using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRpgHealth.Config;
-using Tests.PlayMode.Utils;
 using static Tests.PlayMode.Utils.TestHealthFactory;
 
 namespace ElectricDrill.SimpleRpgHealthTests
@@ -26,16 +25,16 @@ namespace ElectricDrill.SimpleRpgHealthTests
         [SetUp]
         public void SetUp()
         {
-            _sharedEvents = TestHealthFactory.CreateSharedEvents();
+            _sharedEvents = CreateSharedEvents();
 
             // First entity creates config and registers provider
-            _attacker = TestHealthFactory.CreateEntity(
+            _attacker = CreateEntity(
                 "Attacker",
                 initializeStats: true,
                 sharedEvents: _sharedEvents);
 
             // Second entity reuses same config + events
-            _target = TestHealthFactory.CreateEntity(
+            _target = CreateEntity(
                 "Target",
                 sharedConfig: _attacker.Config,
                 sharedEvents: _sharedEvents);
@@ -48,10 +47,10 @@ namespace ElectricDrill.SimpleRpgHealthTests
             _lifestealStat = ScriptableObject.CreateInstance<Stat>();
             _lifestealStat.name = "LifestealStat";
             
-            TestHealthFactory.InjectPercentageStat(_attacker.Stats, _lifestealStat, new Percentage(25));
+            InjectPercentageStat(_attacker.Stats, _lifestealStat, new Percentage(25));
 
             // Assign lifesteal mapping on existing config (its lifesteal config auto-created or created here if missing)
-            _lifestealConfig = TestHealthFactory.AssignLifestealMapping(
+            _lifestealConfig = AssignLifestealMapping(
                 _attacker.Config,
                 _attacker.DefaultDamageType,
                 _lifestealStat,
@@ -94,7 +93,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
         {
             yield return null;
             // Damage the attacker (40) -> 60 HP
-            _attacker.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(40, _target, _attacker));
+            _attacker.Health.TakeDamage(BuildPre(40, _target, _attacker));
             Assert.AreEqual(60, _attacker.Health.Hp);
 
             // Heal 100 -> clamp at 100
@@ -111,7 +110,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
         public IEnumerator TestCriticalHealMultiplier()
         {
             yield return null;
-            _attacker.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(50, _target, _attacker));
+            _attacker.Health.TakeDamage(BuildPre(50, _target, _attacker));
             Assert.AreEqual(50, _attacker.Health.Hp);
 
             // Critical heal: 20 * 2.5 = 50 -> full
@@ -131,11 +130,11 @@ namespace ElectricDrill.SimpleRpgHealthTests
         {
             yield return null;
             // Attacker loses 30 -> 70
-            _attacker.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(30, _target, _attacker));
+            _attacker.Health.TakeDamage(BuildPre(30, _target, _attacker));
             Assert.AreEqual(70, _attacker.Health.Hp);
 
             // Attacker deals 40 -> lifesteal 25% = 10 -> 80
-            _target.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(40, _attacker, _target));
+            _target.Health.TakeDamage(BuildPre(40, _attacker, _target));
             Assert.AreEqual(80, _attacker.Health.Hp);
         }
 
@@ -144,11 +143,11 @@ namespace ElectricDrill.SimpleRpgHealthTests
         {
             yield return null;
             // Attacker loses 50 -> 50
-            _attacker.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(50, _target, _attacker));
+            _attacker.Health.TakeDamage(BuildPre(50, _target, _attacker));
             Assert.AreEqual(50, _attacker.Health.Hp);
 
             // Critical damage: base 20 * 3 = 60 final => lifesteal 25% = 15 -> HP 65
-            _target.Health.TakeDamage(Tests.PlayMode.Utils.TestHealthFactory.BuildPre(20, _attacker, _target, crit: true, critMult: 3d));
+            _target.Health.TakeDamage(BuildPre(20, _attacker, _target, crit: true, critMult: 3d));
             Assert.AreEqual(65, _attacker.Health.Hp);
         }
     }

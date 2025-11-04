@@ -1,5 +1,4 @@
-using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRpgHealth;
+using ElectricDrill.AstraRpgFramework;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRpgFramework.Attributes;
-using ElectricDrill.SoapRpgFramework.Events;
-using ElectricDrill.SoapRpgFramework.Experience;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.AstraRpgFramework;
+using ElectricDrill.AstraRpgFramework.Attributes;
+using ElectricDrill.AstraRpgFramework.Events;
+using ElectricDrill.AstraRpgFramework.Experience;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Config;
 using ElectricDrill.SoapRpgHealth.Damage;
@@ -14,7 +14,7 @@ using ElectricDrill.SoapRpgHealth.Death;
 using ElectricDrill.SoapRpgHealth.Events;
 using ElectricDrill.SoapRpgHealth.Heal;
 using UnityEngine;
-using Attribute = ElectricDrill.SoapRpgFramework.Attributes.Attribute;
+using Attribute = ElectricDrill.AstraRpgFramework.Attributes.Attribute;
 
 namespace Tests.PlayMode.Utils
 {

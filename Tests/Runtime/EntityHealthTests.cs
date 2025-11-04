@@ -1,9 +1,9 @@
 using System;
 using System.Reflection;
-using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRpgFramework.Experience;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.AstraRpgFramework;
+using ElectricDrill.AstraRpgFramework.Experience;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;

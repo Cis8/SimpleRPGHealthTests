@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Reflection;
-using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRpgFramework.Attributes;
-using ElectricDrill.SoapRpgFramework.Events;
-using ElectricDrill.SoapRpgFramework.Scaling.ScalingComponents;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.AstraRpgFramework;
+using ElectricDrill.AstraRpgFramework.Attributes;
+using ElectricDrill.AstraRpgFramework.Events;
+using ElectricDrill.AstraRpgFramework.Scaling.ScalingComponents;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

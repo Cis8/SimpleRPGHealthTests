@@ -1,7 +1,6 @@
 using System.Linq;
-using ElectricDrill.SoapRpgFramework;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgHealth;
+using ElectricDrill.AstraRpgFramework;
+using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.SoapRpgHealth.DamageReductionFunctions;

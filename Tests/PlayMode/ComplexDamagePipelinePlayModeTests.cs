@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Reflection;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth;
 using ElectricDrill.SoapRpgHealth.Config;
 using ElectricDrill.SoapRpgHealth.Damage;

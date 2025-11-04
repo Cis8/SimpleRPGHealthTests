@@ -1,15 +1,13 @@
 ﻿using System.Collections;
-using ElectricDrill.SoapRpgFramework.Stats;
-using ElectricDrill.SoapRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth;
+using System.Collections.Generic;
+using ElectricDrill.AstraRpgFramework.Stats;
+using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.SoapRpgHealth.Config;
-using ElectricDrill.SoapRpgHealth.Damage;
 using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
 using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
 using ElectricDrill.SoapRpgHealth.Heal;
 using NUnit.Framework;
-using Tests.PlayMode.Utils;
 using UnityEngine;
 using UnityEngine.TestTools;
 using static Tests.PlayMode.Utils.TestHealthFactory;
@@ -19,8 +17,8 @@ public class AdditionalDamageEdgeCasesPlayModeTests
     private HealthEntityBundle _atk;
     private HealthEntityBundle _tgt;
     private DamageCalculationStrategy _strategy;
-    private Tests.PlayMode.Utils.TestHealthFactory.HealthEventsBundle _sharedEvents;
-    private readonly System.Collections.Generic.List<Object> _temp = new();
+    private HealthEventsBundle _sharedEvents;
+    private readonly List<Object> _temp = new();
 
     private void Reg(Object o) { if (o) _temp.Add(o); }
 
