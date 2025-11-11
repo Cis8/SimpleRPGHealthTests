@@ -1,5 +1,5 @@
-using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRpgHealth.Death;
+using ElectricDrill.AstraRpgHealth;
+using ElectricDrill.AstraRpgHealth.Death;
 
 namespace ElectricDrill.SoapRpgHealthTests
 {

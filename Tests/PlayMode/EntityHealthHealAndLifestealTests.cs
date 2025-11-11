@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth.Config;
-using ElectricDrill.SoapRpgHealth.Heal;
+using ElectricDrill.AstraRpgHealth.Config;
+using ElectricDrill.AstraRpgHealth.Heal;
 using NUnit.Framework;
-using Tests.PlayMode.Utils;
 using UnityEngine;
 using UnityEngine.TestTools;
 using static Tests.PlayMode.Utils.TestHealthFactory;

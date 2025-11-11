@@ -1,12 +1,12 @@
 using System.Linq;
 using ElectricDrill.AstraRpgFramework;
 using ElectricDrill.AstraRpgFramework.Stats;
-using ElectricDrill.SoapRpgHealth.Damage;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
-using ElectricDrill.SoapRpgHealth.DamageReductionFunctions;
-using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
-using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions;
-using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
+using ElectricDrill.AstraRpgHealth.Damage;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.DamageReductionFunctions;
+using ElectricDrill.AstraRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
+using ElectricDrill.AstraRpgHealth.DefenseReductionFunctions;
+using ElectricDrill.AstraRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
 using NUnit.Framework;
 using UnityEngine;
 

@@ -6,13 +6,13 @@ using ElectricDrill.AstraRpgFramework.Events;
 using ElectricDrill.AstraRpgFramework.Experience;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRpgHealth.Config;
-using ElectricDrill.SoapRpgHealth.Damage;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
-using ElectricDrill.SoapRpgHealth.Death;
-using ElectricDrill.SoapRpgHealth.Events;
-using ElectricDrill.SoapRpgHealth.Heal;
+using ElectricDrill.AstraRpgHealth;
+using ElectricDrill.AstraRpgHealth.Config;
+using ElectricDrill.AstraRpgHealth.Damage;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.Death;
+using ElectricDrill.AstraRpgHealth.Events;
+using ElectricDrill.AstraRpgHealth.Heal;
 using UnityEngine;
 using Attribute = ElectricDrill.AstraRpgFramework.Attributes.Attribute;
 
@@ -58,18 +58,18 @@ namespace Tests.PlayMode.Utils
             public EntityStats Stats;
             public EntityAttributes Attributes;
             public EntityHealth Health;
-            public SoapRpgHealthConfig Config;
+            public AstraRpgHealthConfig Config;
             public DamageType DefaultDamageType;
             public DamageSource DefaultDamageSource;
             public HealthEventsBundle Events; // events actually used (shared or per-entity)
         }
 
         public static HealthEntityBundle CreateEntity(string name = "Entity",
-            SoapRpgHealthConfig sharedConfig = null,
+            AstraRpgHealthConfig sharedConfig = null,
             long maxHp = 100,
             bool allowNegative = false,
             long barrierAmount = 0,
-            Action<SoapRpgHealthConfig> configMutator = null,
+            Action<AstraRpgHealthConfig> configMutator = null,
             Action<EntityHealth> healthMutator = null,
             bool initializeStats = false,
             bool initializeAttributes = false,
@@ -80,7 +80,7 @@ namespace Tests.PlayMode.Utils
             var config = sharedConfig;
             if (config == null)
             {
-                config = ScriptableObject.CreateInstance<SoapRpgHealthConfig>();
+                config = ScriptableObject.CreateInstance<AstraRpgHealthConfig>();
                 // Ensure a default OnDeathStrategy on the config (no reflection)
                 var cfgDeath = ScriptableObject.CreateInstance<TestOnDeathStrategy>();
                 config.DefaultOnDeathStrategy = cfgDeath;
@@ -222,7 +222,7 @@ namespace Tests.PlayMode.Utils
             };
         }
 
-        private static void SetConfigProviderInstance(SoapRpgHealthConfig config)
+        private static void SetConfigProviderInstance(AstraRpgHealthConfig config)
         {
             SoapRpgHealthConfigProvider.Instance = config;
         }
@@ -340,7 +340,7 @@ namespace Tests.PlayMode.Utils
         /// Creates a LifestealConfig with a single mapping (_damageType -> lifestealStatConfig) and assigns it to the provided config.
         /// Returns the created LifestealConfig so tests can Destroy it.
         /// </summary>
-        public static LifestealConfig AssignLifestealMapping(SoapRpgHealthConfig config, DamageType damageType, Stat lifestealStat, HealSource lifestealSource)
+        public static LifestealConfig AssignLifestealMapping(AstraRpgHealthConfig config, DamageType damageType, Stat lifestealStat, HealSource lifestealSource)
         {
             // Prefer existing lifesteal config if already set, else create a fresh one.
             var lifestealConfig = config.LifestealConfig;

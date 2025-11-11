@@ -1,7 +1,7 @@
 using System.Linq;
 using ElectricDrill.AstraRpgFramework;
-using ElectricDrill.SoapRpgHealth.Damage;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.Damage;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
 using UnityEngine;
 

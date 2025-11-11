@@ -2,7 +2,7 @@
 using System.Linq;
 using ElectricDrill.AstraRpgFramework.Editor.Utils;
 using ElectricDrill.AstraRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
 
 // per ExcludeFromDerivedTypePickerAttribute

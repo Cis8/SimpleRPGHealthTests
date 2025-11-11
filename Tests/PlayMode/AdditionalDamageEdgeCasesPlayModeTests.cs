@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth.Config;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
-using ElectricDrill.SoapRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
-using ElectricDrill.SoapRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
-using ElectricDrill.SoapRpgHealth.Heal;
+using ElectricDrill.AstraRpgHealth.Config;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.DamageReductionFunctions.DamageReductionFunctions;
+using ElectricDrill.AstraRpgHealth.DefenseReductionFunctions.DefenseReductionFunctions;
+using ElectricDrill.AstraRpgHealth.Heal;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

@@ -2,10 +2,10 @@ using System.Reflection;
 using ElectricDrill.AstraRpgFramework;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
-using ElectricDrill.SoapRpgHealth;
-using ElectricDrill.SoapRpgHealth.Damage;
-using ElectricDrill.SoapRpgHealth.Damage.CalculationPipeline;
-using ElectricDrill.SoapRpgHealth.Events;
+using ElectricDrill.AstraRpgHealth;
+using ElectricDrill.AstraRpgHealth.Damage;
+using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
+using ElectricDrill.AstraRpgHealth.Events;
 using NUnit.Framework;
 using UnityEngine;
 
