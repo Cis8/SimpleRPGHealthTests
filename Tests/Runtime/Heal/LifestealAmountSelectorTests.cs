@@ -4,7 +4,7 @@ using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.AstraRpgHealth.Heal;
 using NUnit.Framework;
 
-namespace ElectricDrill.SoapRpgHealthTests.Runtime.Heal
+namespace ElectricDrill.AstraRpgHealthTests.Runtime.Heal
 {
     public class LifestealAmountSelectorTests
     {

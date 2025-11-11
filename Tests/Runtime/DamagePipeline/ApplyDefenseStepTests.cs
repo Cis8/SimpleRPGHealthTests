@@ -10,7 +10,7 @@ using ElectricDrill.AstraRpgHealth.DefenseReductionFunctions.DefenseReductionFun
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
+namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
 {
     public class ApplyDefenseStepTests
     {

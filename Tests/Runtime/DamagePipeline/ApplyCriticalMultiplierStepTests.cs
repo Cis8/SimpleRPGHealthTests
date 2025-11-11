@@ -5,7 +5,7 @@ using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
+namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
 {
     public class ApplyCriticalMultiplierStepTests
     {

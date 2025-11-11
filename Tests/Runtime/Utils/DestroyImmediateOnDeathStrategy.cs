@@ -1,7 +1,7 @@
 using ElectricDrill.AstraRpgHealth;
 using ElectricDrill.AstraRpgHealth.Death;
 
-namespace ElectricDrill.SoapRpgHealthTests
+namespace ElectricDrill.AstraRpgHealthTests
 {
     public class DestroyImmediateOnDeathStrategy : OnDeathStrategy
     {

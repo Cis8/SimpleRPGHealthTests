@@ -14,7 +14,7 @@ using NUnit.Framework;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ElectricDrill.SoapRpgHealthTests
+namespace ElectricDrill.AstraRpgHealthTests
 {
     public class EntityHealthTests
     {

@@ -9,7 +9,7 @@ using ElectricDrill.AstraRpgHealth.Events;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ElectricDrill.SoapRpgHealthTests.DamagePipeline
+namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
 {
     public class ApplyBarrierStepTests
     {

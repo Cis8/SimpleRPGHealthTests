@@ -2,7 +2,7 @@ using ElectricDrill.AstraRpgHealth.Damage;
 using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using NUnit.Framework;
 
-namespace ElectricDrill.SoapRpgHealthTests.Runtime.Damage
+namespace ElectricDrill.AstraRpgHealthTests.Runtime.Damage
 {
     public class DamageAmountInfoTests
     {

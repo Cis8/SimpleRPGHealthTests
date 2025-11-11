@@ -10,7 +10,7 @@ using NUnit.Framework;
 [ExcludeFromDerivedTypePicker] public class PickerTestStepAlpha : DamageStep { public override string DisplayName => "Alpha"; public override DamageInfo ProcessStep(DamageInfo d)=>d; }
 [ExcludeFromDerivedTypePicker] public class PickerTestStepBeta  : DamageStep { public override string DisplayName => "Beta";  public override DamageInfo ProcessStep(DamageInfo d)=>d; }
 
-namespace ElectricDrill.SoapRpgHealthTests.Editor
+namespace ElectricDrill.AstraRpgHealthTests.Editor
 {
     public class DerivedTypePickerTests
     {

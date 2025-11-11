@@ -1,7 +1,7 @@
 using ElectricDrill.AstraRpgFramework.Utils;
 using UnityEngine;
 
-namespace ElectricDrill.SoapRpgHealthTests
+namespace ElectricDrill.AstraRpgHealthTests
 {
     public static class LongVarFactory
     {
