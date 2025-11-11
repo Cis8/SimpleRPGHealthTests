@@ -1,6 +1,6 @@
 {
-    "name": "com.electricdrill.soap-rpg-health-tests.Tests",
-    "rootNamespace": "ElectricDrill.SoapRpgHealthTests",
+    "name": "com.electricdrill.astra-rpg-health-tests.Tests",
+    "rootNamespace": "ElectricDrill.AstraRpgHealthTests",
     "references": [
         "GUID:46d39bf349b8a94469f824a6ac71ae68",
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
