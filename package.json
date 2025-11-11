@@ -6,8 +6,8 @@
   "unity": "2022.1",
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",
-    "com.electricdrill.astra-rpg-framework": "1.1.0",
-    "com.electricdrill.soap-rpg-health": "1.0.0",
+    "com.electricdrill.astra-rpg-framework": "1.1.1",
+    "com.electricdrill.astra-rpg-health": "1.0.0",
     "com.github-glitchenzo.nugetforunity": "4.1.1"
   },
   "keywords": [
