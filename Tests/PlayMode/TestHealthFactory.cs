@@ -224,7 +224,7 @@ namespace Tests.PlayMode.Utils
 
         private static void SetConfigProviderInstance(AstraRpgHealthConfig config)
         {
-            SoapRpgHealthConfigProvider.Instance = config;
+            AstraRpgHealthConfigProvider.Instance = config;
         }
 
         public static PreDamageInfo BuildPre(long amount, HealthEntityBundle dealer, HealthEntityBundle target,

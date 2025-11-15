@@ -155,7 +155,7 @@ public class AdditionalDamageEdgeCasesPlayModeTests
         var healSource = ScriptableObject.CreateInstance<HealSource>(); Reg(healSource);
         var cfg = AssignLifestealMapping(_atk.Config, _atk.DefaultDamageType, lsStat, healSource); Reg(cfg);
         ConfigureLifestealBasisAfterCritical(cfg, _atk.DefaultDamageType, lsStat, healSource);
-        SoapRpgHealthConfigProvider.Instance.LifestealConfig = cfg;
+        AstraRpgHealthConfigProvider.Instance.LifestealConfig = cfg;
 
         _atk.Health._hp.Value = 95L;
 

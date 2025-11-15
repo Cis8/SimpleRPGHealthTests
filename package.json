@@ -2,7 +2,7 @@
   "name": "com.electricdrill.astra-rpg-health-tests",
   "version": "1.0.0",
   "displayName": "AstraRPGHealthTests",
-  "description": "Tests package for SoapRPGHealth",
+  "description": "Tests package for AstraRPGHealth",
   "unity": "2022.1",
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",

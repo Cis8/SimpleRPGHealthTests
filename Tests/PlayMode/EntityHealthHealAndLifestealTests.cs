@@ -56,7 +56,7 @@ namespace ElectricDrill.SimpleRpgHealthTests
                 _lifestealHealSource
             );
             
-            SoapRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealConfig;
+            AstraRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealConfig;
         }
 
         [TearDown]

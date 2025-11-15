@@ -84,7 +84,7 @@ public class ComplexDamagePipelinePlayModeTests
         var lifestealSource = ScriptableObject.CreateInstance<HealSource>();
         _lifestealCfg = AssignLifestealMapping(_attacker.Config, dmgType, _lifestealStat, lifestealSource);
         ConfigureLifestealBasisAfterCritical(_lifestealCfg, dmgType, _lifestealStat, lifestealSource);
-        SoapRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealCfg;
+        AstraRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealCfg;
     }
 
     [TearDown]
