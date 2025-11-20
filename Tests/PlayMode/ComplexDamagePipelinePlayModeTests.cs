@@ -12,10 +12,12 @@ using ElectricDrill.AstraRpgHealth.Heal;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static Tests.PlayMode.Utils.TestHealthFactory;
+using static ElectricDrill.AstraRpgHealthTests.Tests.PlayMode.TestHealthFactory;
 
-public class ComplexDamagePipelinePlayModeTests
+namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
 {
+    public class ComplexDamagePipelinePlayModeTests
+    {
     private HealthEntityBundle _attacker;
     private HealthEntityBundle _target;
 
@@ -84,7 +86,8 @@ public class ComplexDamagePipelinePlayModeTests
         var lifestealSource = ScriptableObject.CreateInstance<HealSource>();
         _lifestealCfg = AssignLifestealMapping(_attacker.Config, dmgType, _lifestealStat, lifestealSource);
         ConfigureLifestealBasisAfterCritical(_lifestealCfg, dmgType, _lifestealStat, lifestealSource);
-        AstraRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealCfg;
+        // Set lifesteal config directly on the shared config
+        _attacker.Config.LifestealConfig = _lifestealCfg;
     }
 
     [TearDown]
@@ -154,4 +157,5 @@ public class ComplexDamagePipelinePlayModeTests
 
         yield break;
     }
+}
 }

@@ -9,7 +9,7 @@ using ElectricDrill.AstraRpgFramework.Utils;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static Tests.PlayMode.Utils.TestHealthFactory;
+using static ElectricDrill.AstraRpgHealthTests.Tests.PlayMode.TestHealthFactory;
 
 public class EntityHealthMaxHpScalingTests
 {

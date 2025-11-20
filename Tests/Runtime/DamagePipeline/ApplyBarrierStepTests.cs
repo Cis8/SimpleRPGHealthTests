@@ -3,9 +3,11 @@ using ElectricDrill.AstraRpgFramework;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.AstraRpgHealth;
+using ElectricDrill.AstraRpgHealth.Config;
 using ElectricDrill.AstraRpgHealth.Damage;
 using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.AstraRpgHealth.Events;
+using ElectricDrill.AstraRpgHealthTests.TestUtils;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -58,6 +60,10 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
 
             eh._entityCore = core;
             eh._entityStats = stats;
+            
+            // Inject mock config via provider to avoid dependency on Resources
+            AstraRpgHealthConfigProvider.Instance = MockAstraRpgHealthConfig.CreateMinimal();
+            
             eh.SetupMaxHp();
             return (eh, core);
         }
@@ -135,6 +141,13 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
 
             Assert.AreEqual(RAW - BARRIER, info.Amounts.Current);
             Assert.AreEqual(0, eh.Barrier);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Reset provider to prevent test pollution
+            AstraRpgHealthConfigProvider.Reset();
         }
     }
 }

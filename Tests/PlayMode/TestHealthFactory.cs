@@ -16,7 +16,7 @@ using ElectricDrill.AstraRpgHealth.Heal;
 using UnityEngine;
 using Attribute = ElectricDrill.AstraRpgFramework.Attributes.Attribute;
 
-namespace Tests.PlayMode.Utils
+namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
 {
     /// <summary>
     /// Utility factory methods to spawn fully configured EntityHealth objects for play mode tests.

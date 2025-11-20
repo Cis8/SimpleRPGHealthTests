@@ -1,9 +1,9 @@
 ﻿using System.Collections;
+using ElectricDrill.AstraRpgHealthTests.Tests.PlayMode;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Tests.PlayMode.Utils;
-using static Tests.PlayMode.Utils.TestHealthFactory;
+using static ElectricDrill.AstraRpgHealthTests.Tests.PlayMode.TestHealthFactory;
 
 namespace ElectricDrill.SimpleRpgHealthTests
 {
@@ -16,8 +16,8 @@ namespace ElectricDrill.SimpleRpgHealthTests
         public void SetUp()
         {
             // Create two entities (attacker & target) so we mirror live damage scenario
-            _attacker = TestHealthFactory.CreateEntity("Attacker");
-            _target = TestHealthFactory.CreateEntity("Target");
+            _attacker = CreateEntity("Attacker");
+            _target = CreateEntity("Target");
         }
 
         [TearDown]

@@ -6,9 +6,9 @@ using ElectricDrill.AstraRpgHealth.Heal;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static Tests.PlayMode.Utils.TestHealthFactory;
+using static ElectricDrill.AstraRpgHealthTests.Tests.PlayMode.TestHealthFactory;
 
-namespace ElectricDrill.SimpleRpgHealthTests
+namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
 {
     public class EntityHealthHealAndLifestealTests
     {
@@ -56,7 +56,8 @@ namespace ElectricDrill.SimpleRpgHealthTests
                 _lifestealHealSource
             );
             
-            AstraRpgHealthConfigProvider.Instance.LifestealConfig = _lifestealConfig;
+            // Set lifesteal config directly on the shared config
+            _attacker.Config.LifestealConfig = _lifestealConfig;
         }
 
         [TearDown]

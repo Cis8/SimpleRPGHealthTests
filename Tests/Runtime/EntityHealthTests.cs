@@ -5,10 +5,12 @@ using ElectricDrill.AstraRpgFramework.Experience;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
 using ElectricDrill.AstraRpgHealth;
+using ElectricDrill.AstraRpgHealth.Config;
 using ElectricDrill.AstraRpgHealth.Damage;
 using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.AstraRpgHealth.Events;
 using ElectricDrill.AstraRpgHealth.Heal;
+using ElectricDrill.AstraRpgHealthTests.TestUtils;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -110,6 +112,9 @@ namespace ElectricDrill.AstraRpgHealthTests
             SetPriv("_preHealEvent", ScriptableObject.CreateInstance<PreHealGameEvent>());
             SetPriv("_entityHealedEvent", ScriptableObject.CreateInstance<EntityHealedGameEvent>());
 
+            // Inject mock config via provider to avoid dependency on Resources
+            AstraRpgHealthConfigProvider.Instance = MockAstraRpgHealthConfig.CreateMinimal();
+
             _entityHealth.SetupMaxHp();
 
             var defaultStrategy = TestDamageCalculationStrategy.Create(info => info);
@@ -128,6 +133,8 @@ namespace ElectricDrill.AstraRpgHealthTests
         public void Teardown()
         {
             Object.DestroyImmediate(_go);
+            // Reset provider to prevent test pollution
+            AstraRpgHealthConfigProvider.Reset();
         }
 
         private PreDamageInfo BuildPre(long amount, bool ignore = false)
