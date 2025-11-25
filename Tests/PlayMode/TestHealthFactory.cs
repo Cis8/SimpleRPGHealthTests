@@ -120,10 +120,13 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
             // Core (no reflection needed for Level property: internal setter)
             var core = go.AddComponent<EntityCore>();
             core.Level = new EntityLevel();
-            // Still need reflection for private _onLevelUp inside EntityLevel (no public/internal API exposed)
+            // Still need reflection for private _onLevelUp and _onLevelDown inside EntityLevel (no public/internal API exposed)
             typeof(EntityLevel)
                 .GetField("_onLevelUp", BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.SetValue(core.Level, ScriptableObject.CreateInstance<EntityLeveledUpGameEvent>());
+            typeof(EntityLevel)
+                .GetField("_onLevelDown", BindingFlags.NonPublic | BindingFlags.Instance)
+                ?.SetValue(core.Level, ScriptableObject.CreateInstance<EntityLeveledDownGameEvent>());
             core.SpawnedEntityEvent = ScriptableObject.CreateInstance<EntityCoreGameEvent>();
 
             // Stats
