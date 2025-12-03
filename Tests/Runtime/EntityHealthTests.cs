@@ -115,7 +115,7 @@ namespace ElectricDrill.AstraRpgHealthTests
             // Inject mock config via provider to avoid dependency on Resources
             AstraRpgHealthConfigProvider.Instance = MockAstraRpgHealthConfig.CreateMinimal();
 
-            _entityHealth.SetupMaxHp();
+            _entityHealth.SetupMaxHp(EntityHealth.HpBehaviourOnMaxHpIncrease.AddHealthUpToMaxHp);
 
             var defaultStrategy = TestDamageCalculationStrategy.Create(info => info);
             _entityHealth._customDamageCalculationStrategy = defaultStrategy;
@@ -234,7 +234,7 @@ namespace ElectricDrill.AstraRpgHealthTests
             // Reconfigure
             _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = 100 };
             _entityHealth._totalMaxHp = new LongRef { UseConstant = true };
-            _entityHealth.SetupMaxHp();
+            _entityHealth.SetupMaxHp(EntityHealth.HpBehaviourOnMaxHpIncrease.AddHealthUpToMaxHp);
 
             _entityHealth.AddMaxHpFlatModifier(50); // 150
             _entityHealth.AddMaxHpPercentageModifier(new Percentage(20)); // +30 = 180

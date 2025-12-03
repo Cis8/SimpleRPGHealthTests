@@ -6,6 +6,7 @@ using ElectricDrill.AstraRpgFramework.Events;
 using ElectricDrill.AstraRpgFramework.Scaling.ScalingComponents;
 using ElectricDrill.AstraRpgFramework.Stats;
 using ElectricDrill.AstraRpgFramework.Utils;
+using ElectricDrill.AstraRpgHealth;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -187,7 +188,7 @@ public class EntityHealthMaxHpScalingTests
         _entity.Config.HealthAttributesScaling = attrScaling;
 
         // Recompute max HP with attribute scaling
-        _entity.Health.SetupMaxHp();
+        _entity.Health.SetupMaxHp(EntityHealth.HpBehaviourOnMaxHpIncrease.AddHealthUpToMaxHp);
         Assert.AreEqual(112, _entity.Health.MaxHp);
 
         // Change scaling amount and raise attribute change

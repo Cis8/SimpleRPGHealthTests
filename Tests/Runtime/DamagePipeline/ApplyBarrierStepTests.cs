@@ -64,7 +64,7 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
             // Inject mock config via provider to avoid dependency on Resources
             AstraRpgHealthConfigProvider.Instance = MockAstraRpgHealthConfig.CreateMinimal();
             
-            eh.SetupMaxHp();
+            eh.SetupMaxHp(EntityHealth.HpBehaviourOnMaxHpIncrease.AddHealthUpToMaxHp);
             return (eh, core);
         }
 
