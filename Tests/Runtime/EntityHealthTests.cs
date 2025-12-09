@@ -96,7 +96,7 @@ namespace ElectricDrill.AstraRpgHealthTests
             _entityHealth._entityStats = _mockEntityStats.Object;
 
             _entityHealth._baseMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
-            _entityHealth._totalMaxHp = new LongRef { UseConstant = true };
+            _entityHealth._totalMaxHp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             _entityHealth._hp = new LongRef { UseConstant = true, ConstantValue = MAX_HP };
             _entityHealth._deathThreshold = LongVarFactory.CreateLongVar(0);
             _entityHealth._barrier = new LongRef { UseConstant = true, ConstantValue = 0 };
