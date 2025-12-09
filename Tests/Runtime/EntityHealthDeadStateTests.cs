@@ -245,7 +245,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.Runtime
             Assert.AreEqual(0, _entityHealth.Hp);
 
             // Resurrect with 50 HP
-            _entityHealth.Resurrect(50);
+            _entityHealth.Resurrect(50, _healSource);
 
             Assert.IsFalse(_entityHealth.IsDead());
             Assert.IsTrue(_entityHealth.IsAlive());
@@ -260,7 +260,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.Runtime
             Assert.IsTrue(_entityHealth.IsDead());
 
             // Resurrect with 75% HP
-            _entityHealth.Resurrect(new Percentage(75));
+            _entityHealth.Resurrect(new Percentage(75), _healSource);
 
             Assert.IsFalse(_entityHealth.IsDead());
             Assert.AreEqual(75, _entityHealth.Hp);
@@ -272,7 +272,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.Runtime
             Assert.IsFalse(_entityHealth.IsDead());
 
             var ex = Assert.Throws<InvalidOperationException>(() => 
-                _entityHealth.Resurrect(50)
+                _entityHealth.Resurrect(50, _healSource)
             );
             
             Assert.IsNotNull(ex);
@@ -284,7 +284,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.Runtime
         {
             // Kill and resurrect
             _entityHealth.TakeDamage(CreateDamageInfo(MaxHp));
-            _entityHealth.Resurrect(50);
+            _entityHealth.Resurrect(50, _healSource);
             Assert.AreEqual(50, _entityHealth.Hp);
 
             // Heal should work now
@@ -297,7 +297,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.Runtime
         {
             // Kill and resurrect
             _entityHealth.TakeDamage(CreateDamageInfo(MaxHp));
-            _entityHealth.Resurrect(50);
+            _entityHealth.Resurrect(50, _healSource);
 
             // Damage should work now
             var dmgResult = _entityHealth.TakeDamage(CreateDamageInfo(20));

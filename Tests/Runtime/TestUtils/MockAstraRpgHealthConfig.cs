@@ -28,6 +28,7 @@ namespace ElectricDrill.AstraRpgHealthTests.TestUtils
         public Stat ManualHealthRegenerationStat { get; set; }
         public LifestealConfig LifestealConfig { get; set; }
         public OnDeathStrategy DefaultOnDeathStrategy { get; set; }
+        public HealSource DefaultResurrectionSource { get; set; }
 
         public MockAstraRpgHealthConfig()
         {
@@ -45,6 +46,9 @@ namespace ElectricDrill.AstraRpgHealthTests.TestUtils
             
             // Create a default death strategy
             DefaultOnDeathStrategy = ScriptableObject.CreateInstance<DestroyImmediateOnDeathStrategy>();
+            
+            // Create a default HealSource for resurrection
+            DefaultResurrectionSource = ScriptableObject.CreateInstance<HealSource>();
         }
 
         /// <summary>
@@ -75,6 +79,18 @@ namespace ElectricDrill.AstraRpgHealthTests.TestUtils
             var config = new MockAstraRpgHealthConfig
             {
                 DefaultOnDeathStrategy = strategy
+            };
+            return config;
+        }
+        
+        /// <summary>
+        /// Creates a mock config with a custom resurrection heal source.
+        /// </summary>
+        public static MockAstraRpgHealthConfig WithResurrectionSource(HealSource healSource)
+        {
+            var config = new MockAstraRpgHealthConfig
+            {
+                DefaultResurrectionSource = healSource
             };
             return config;
         }
