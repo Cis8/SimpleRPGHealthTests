@@ -14,7 +14,7 @@ namespace ElectricDrill.AstraRpgHealthTests.TestUtils
     /// Mock implementation of IAstraRpgHealthConfig for testing purposes.
     /// Provides sensible defaults and allows overriding specific properties.
     /// </summary>
-    public class MockAstraRpgHealthConfig : IAstraRpgHealthConfig
+    internal class MockAstraRpgHealthConfig : IAstraRpgHealthConfig
     {
         public AttributesScalingComponent HealthAttributesScaling { get; set; }
         public Stat HealAmountModifierStat { get; set; }

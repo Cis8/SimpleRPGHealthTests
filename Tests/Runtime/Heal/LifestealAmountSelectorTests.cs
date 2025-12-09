@@ -1,4 +1,3 @@
-using System.Reflection;
 using ElectricDrill.AstraRpgHealth.Damage;
 using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.AstraRpgHealth.Heal;
@@ -35,8 +34,8 @@ namespace ElectricDrill.AstraRpgHealthTests.Runtime.Heal
         {
             var amounts = BuildAmounts();
             var selector = new LifestealAmountSelector();
-            typeof(LifestealAmountSelector).GetField("_mode", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(selector, LifestealBasisMode.Initial);
+            // use public property instead of reflection
+            selector.Mode = LifestealBasisMode.Initial;
             Assert.AreEqual(100, selector.Evaluate(amounts));
         }
 
@@ -54,13 +53,13 @@ namespace ElectricDrill.AstraRpgHealthTests.Runtime.Heal
         {
             var amounts = BuildAmounts();
             var selector = new LifestealAmountSelector();
-            // configure for Step / DefStep / Pre
-            SetPrivate(selector, "_mode", LifestealBasisMode.Step);
+            // configure for Step / DefStep / Pre using public properties
+            selector.Mode = LifestealBasisMode.Step;
             selector.StepType = typeof(DefStep);
-            SetPrivate(selector, "_stepPoint", StepValuePoint.Pre);
+            selector.StepPoint = StepValuePoint.Pre;
             Assert.AreEqual(100, selector.Evaluate(amounts));
             // Post
-            SetPrivate(selector, "_stepPoint", StepValuePoint.Post);
+            selector.StepPoint = StepValuePoint.Post;
             Assert.AreEqual(70, selector.Evaluate(amounts));
         }
 
@@ -69,7 +68,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Runtime.Heal
         {
             var amounts = BuildAmounts();
             var selector = new LifestealAmountSelector();
-            SetPrivate(selector, "_mode", LifestealBasisMode.Step);
+            selector.Mode = LifestealBasisMode.Step;
             selector.StepType = typeof(UnusedStep);
             Assert.AreEqual(40, selector.Evaluate(amounts));
         }
@@ -79,10 +78,5 @@ namespace ElectricDrill.AstraRpgHealthTests.Runtime.Heal
             public override string DisplayName => "Unused";
             public override DamageInfo ProcessStep(DamageInfo data) => data;
         }
-
-        private static void SetPrivate(object target, string field, object value) =>
-            target.GetType().GetField(field, BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(target, value);
     }
 }
-

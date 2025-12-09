@@ -343,7 +343,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
         /// Creates a LifestealConfig with a single mapping (_damageType -> lifestealStatConfig) and assigns it to the provided config.
         /// Returns the created LifestealConfig so tests can Destroy it.
         /// </summary>
-        public static LifestealConfig AssignLifestealMapping(AstraRpgHealthConfig config, DamageType damageType, Stat lifestealStat, HealSource lifestealSource)
+        internal static LifestealConfig AssignLifestealMapping(AstraRpgHealthConfig config, DamageType damageType, Stat lifestealStat, HealSource lifestealSource)
         {
             // Prefer existing lifesteal config if already set, else create a fresh one.
             var lifestealConfig = config.LifestealConfig;
@@ -396,7 +396,7 @@ namespace ElectricDrill.AstraRpgHealthTests.Tests.PlayMode
         /// Uses Step mode (no reflection).
         /// Overwrites any existing mapping for the _damageType.
         /// </summary>
-        public static LifestealStatConfig ConfigureLifestealBasisAfterCritical(
+        internal static LifestealStatConfig ConfigureLifestealBasisAfterCritical(
             LifestealConfig cfg,
             DamageType damageType,
             Stat lifestealStat,
