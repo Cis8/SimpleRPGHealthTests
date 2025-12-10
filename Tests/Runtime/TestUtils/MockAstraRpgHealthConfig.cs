@@ -6,6 +6,7 @@ using ElectricDrill.AstraRpgHealth.Damage;
 using ElectricDrill.AstraRpgHealth.Damage.CalculationPipeline;
 using ElectricDrill.AstraRpgHealth.Death;
 using ElectricDrill.AstraRpgHealth.Heal;
+using ElectricDrill.AstraRpgHealth.Resurrection;
 using UnityEngine;
 
 namespace ElectricDrill.AstraRpgHealthTests.TestUtils
@@ -28,6 +29,7 @@ namespace ElectricDrill.AstraRpgHealthTests.TestUtils
         public Stat ManualHealthRegenerationStat { get; set; }
         public LifestealConfig LifestealConfig { get; set; }
         public OnDeathStrategy DefaultOnDeathStrategy { get; set; }
+        public OnResurrectionStrategy DefaultOnResurrectionStrategy { get; set; }
         public HealSource DefaultResurrectionSource { get; set; }
 
         public MockAstraRpgHealthConfig()
