@@ -143,6 +143,50 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
             Assert.AreEqual(0, eh.Barrier);
         }
 
+        [Test]
+        public void ApplyBarrierStep_SetsBarrierAbsorbedReason_WhenBarrierFullyAbsorbsDamage()
+        {
+            const long RAW = 20;
+            const long BARRIER = 50;
+            var (eh, core) = MakeEntity(100, BARRIER);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(), core, core);
+
+            new ApplyBarrierStep().Process(info);
+
+            Assert.AreEqual(0, info.Amounts.Current);
+            Assert.IsTrue((info.Reasons & DamagePreventionReason.BarrierAbsorbed) != 0);
+            Assert.AreEqual(typeof(ApplyBarrierStep), info.TerminationStepType);
+        }
+
+        [Test]
+        public void ApplyBarrierStep_DoesNotSetBarrierAbsorbedReason_WhenBarrierPartiallyAbsorbsDamage()
+        {
+            const long RAW = 60;
+            const long BARRIER = 30;
+            var (eh, core) = MakeEntity(100, BARRIER);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(), core, core);
+
+            new ApplyBarrierStep().Process(info);
+
+            Assert.AreEqual(30, info.Amounts.Current);
+            Assert.IsFalse((info.Reasons & DamagePreventionReason.BarrierAbsorbed) != 0);
+            Assert.IsNull(info.TerminationStepType);
+        }
+
+        [Test]
+        public void ApplyBarrierStep_DoesNotSetBarrierAbsorbedReason_WhenDamageTypeIgnoresBarrier()
+        {
+            const long RAW = 20;
+            const long BARRIER = 50;
+            var (eh, core) = MakeEntity(100, BARRIER);
+            var info = MakeDamageInfo(RAW, MockDamageType.Create(ignoresBarrier: true), core, core);
+
+            new ApplyBarrierStep().Process(info);
+
+            Assert.AreEqual(RAW, info.Amounts.Current);
+            Assert.IsFalse((info.Reasons & DamagePreventionReason.BarrierAbsorbed) != 0);
+        }
+
         [TearDown]
         public void TearDown()
         {

@@ -173,5 +173,71 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
             Assert.AreEqual(RAW, rec2.Pre);
             Assert.AreEqual(EXPECTED, rec2.Post);
         }
+
+        [Test]
+        public void ApplyDefenseStep_SetsDefenseAbsorbedReason_WhenDefenseFullyAbsorbsDamage()
+        {
+            const long RAW = 50;
+            const long EXPECTED = 0; // fully absorbed
+
+            var defStat = ScriptableObject.CreateInstance<Stat>();
+            var dmgFn = ScriptableObject.CreateInstance<MockFlatDamageReductionFn>();
+            dmgFn.Set(EXPECTED);
+
+            var (target, dealer, _, _) = MakeEntities(defensiveValue: 100, defensiveStat: defStat);
+
+            var dmgType = MockDamageType.Create(def: defStat, damageFn: dmgFn);
+            var info = MakeDamageInfo(RAW, dmgType, target, dealer);
+
+            var step = new ApplyDefenseStep();
+            step.Process(info);
+
+            Assert.AreEqual(0, info.Amounts.Current);
+            Assert.IsTrue((info.Reasons & DamagePreventionReason.DefenseAbsorbed) != 0);
+            Assert.AreEqual(typeof(ApplyDefenseStep), info.TerminationStepType);
+        }
+
+        [Test]
+        public void ApplyDefenseStep_DoesNotSetDefenseAbsorbedReason_WhenDefensePartiallyReducesDamage()
+        {
+            const long RAW = 100;
+            const long EXPECTED = 40; // partially reduced
+
+            var defStat = ScriptableObject.CreateInstance<Stat>();
+            var dmgFn = ScriptableObject.CreateInstance<MockFlatDamageReductionFn>();
+            dmgFn.Set(EXPECTED);
+
+            var (target, dealer, _, _) = MakeEntities(defensiveValue: 50, defensiveStat: defStat);
+
+            var dmgType = MockDamageType.Create(def: defStat, damageFn: dmgFn);
+            var info = MakeDamageInfo(RAW, dmgType, target, dealer);
+
+            var step = new ApplyDefenseStep();
+            step.Process(info);
+
+            Assert.AreEqual(EXPECTED, info.Amounts.Current);
+            Assert.IsFalse((info.Reasons & DamagePreventionReason.DefenseAbsorbed) != 0);
+            Assert.IsNull(info.TerminationStepType);
+        }
+
+        [Test]
+        public void ApplyDefenseStep_DoesNotSetDefenseAbsorbedReason_WhenNoDamageFunctionConfigured()
+        {
+            const long RAW = 80;
+
+            var defStat = ScriptableObject.CreateInstance<Stat>();
+            var (target, dealer, _, _) = MakeEntities(defensiveValue: 200, defensiveStat: defStat);
+
+            // No damage reduction function configured
+            var dmgType = MockDamageType.Create(def: defStat, damageFn: null);
+            var info = MakeDamageInfo(RAW, dmgType, target, dealer);
+
+            var step = new ApplyDefenseStep();
+            step.Process(info);
+
+            // Damage should remain unchanged
+            Assert.AreEqual(RAW, info.Amounts.Current);
+            Assert.IsFalse((info.Reasons & DamagePreventionReason.DefenseAbsorbed) != 0);
+        }
     }
 }
