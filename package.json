@@ -7,7 +7,7 @@
   "dependencies": {
     "com.unity.ext.nunit": "2.0.5",
     "com.electricdrill.astra-rpg-framework": "2.0.1",
-    "com.electricdrill.astra-health": "1.0.0",
+    "individual.emanuele-cisotto.astra-health": "1.0.0",
     "com.github-glitchenzo.nugetforunity": "4.1.1"
   },
   "keywords": [
