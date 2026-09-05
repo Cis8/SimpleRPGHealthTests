@@ -52,7 +52,7 @@ namespace ElectricDrill.AstraRpgHealthTests.DamagePipeline
         [TearDown]
         public void Cleanup()
         {
-            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include))
                 Object.DestroyImmediate(go);
         }
 
